@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "weL1mTMpBBSZTLRbMVw7RM9ri56D4zcQ73ZRBMIWmAc=",
+  "Source": "DirectFarm.API",
+  "BasePath": "_content/DirectFarm.API",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
