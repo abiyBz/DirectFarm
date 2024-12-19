@@ -7,9 +7,25 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Context\" />
-    <Folder Include="Dependency\" />
-    <Folder Include="Repository\" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Minio" Version="6.0.3" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DirectFarm.Core\DirectFarm.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Infrastracture.Base">
+      <HintPath>..\DirectFarm.Core\Infrastructure.libs\Infrastracture.Base.dll</HintPath>
+    </Reference>
+    <Reference Include="Infrastracture.Base.EF">
+      <HintPath>..\DirectFarm.Core\Infrastructure.libs\Infrastracture.Base.EF.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -9,6 +9,24 @@
   <ItemGroup>
     <PackageReference Include="MediatR" Version="12.4.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DirectFarm.Core\DirectFarm.Core.csproj" />
+    <ProjectReference Include="..\DirectFarm.Infrastracture\DirectFarm.Infrastracture.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Infrastracture.Base">
+      <HintPath>..\DirectFarm.Core\Infrastructure.libs\Infrastracture.Base.dll</HintPath>
+    </Reference>
+    <Reference Include="Infrastracture.Base.EF">
+      <HintPath>..\DirectFarm.Core\Infrastructure.libs\Infrastracture.Base.EF.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="PostModel\" />
   </ItemGroup>
 
 </Project>

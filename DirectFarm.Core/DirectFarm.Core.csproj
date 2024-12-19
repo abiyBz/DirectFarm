@@ -8,13 +8,16 @@
 
   <ItemGroup>
     <PackageReference Include="MediatR" Version="12.4.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Contracts\" />
-    <Folder Include="Entity\" />
-    <Folder Include="Handlers\" />
-    <Folder Include="Models\" />
+    <Reference Include="Infrastracture.Base">
+      <HintPath>..\..\dalloll.tallent\dalloll.core\Infrastructure.libs\Infrastracture.Base.dll</HintPath>
+    </Reference>
+    <Reference Include="Infrastracture.Base.EF">
+      <HintPath>..\..\dalloll.tallent\dalloll.core\Infrastructure.libs\Infrastracture.Base.EF.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>
