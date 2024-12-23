@@ -1,0 +1,25 @@
+﻿using DirectFarm.Core.Entity;
+
+namespace DirectFarm.API.PostModel
+{
+    public class TokenResponseModel
+    {
+        public string? AccessToken { get; set; }
+        //[JsonPropertyName("refresh_token")]
+        //public string RefreshToken { get; set; }
+        public int ExpiresIn { get; set; }
+        //[JsonPropertyName("refresh_expires_in")]
+        //public int RefreshExpiresIn { get; set; }
+        public TokenResponseModel() { }
+        public TokenResponseModel(CustomerEntity tokenEntity) 
+        {
+            AccessToken = tokenEntity.AccessToken;
+            ExpiresIn = tokenEntity.ExpiresIn;
+        }
+        //public TokenResponseModel(TokenEntity tokenEntity)
+        //{
+        //    AccessToken = tokenEntity.AccessToken;
+        //    ExpiresIn = tokenEntity.ExpiresIn;
+        //}
+    }
+}

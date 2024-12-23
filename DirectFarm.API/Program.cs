@@ -1,4 +1,7 @@
 using DirectFarm.Infrastracture.Dependency;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -45,6 +48,63 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddAuthorization();
 builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(o =>
+                {
+                    o.RequireHttpsMetadata = false;
+                    o.Audience = builder.Configuration["Authentication:Audience"];
+                    o.MetadataAddress = builder.Configuration["Authentication:MetadataAddress"];
+                    o.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                        ValidAudience = builder.Configuration["Jwt:Audience"],
+                        ClockSkew = TimeSpan.Zero,
+                    };
+                });
+builder.Services.AddControllersWithViews();
+builder.Services.AddSwaggerGen(o =>
+{
+
+    o.CustomSchemaIds(id => id.FullName!.Replace('+', '-'));
+    o.AddSecurityDefinition("Keycloak", new OpenApiSecurityScheme
+    {
+        Type = SecuritySchemeType.OAuth2,
+        Flows = new OpenApiOAuthFlows
+        {
+            Implicit = new OpenApiOAuthFlow
+            {
+                AuthorizationUrl = new Uri(builder.Configuration["Keycloak:AuthorizationUrl"]!),
+                Scopes = new Dictionary<string, string> {
+
+                                { "openid", "openid" },
+                                { "profile", "profile" }
+                            }
+            }
+        }
+    });
+    var securityRequirement = new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Id = "Keycloak",
+                                Type = ReferenceType.SecurityScheme
+                            },
+
+                            In = ParameterLocation.Header,
+                            Name = "Bearer",
+                            Scheme = "Bearer"
+                        },
+                        []
+                    }
+
+                };
+
+    o.AddSecurityRequirement(securityRequirement);
+});
 
 var app = builder.Build();
 

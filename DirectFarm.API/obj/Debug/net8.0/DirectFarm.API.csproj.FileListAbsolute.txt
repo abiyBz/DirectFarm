@@ -60,3 +60,11 @@ C:\Users\abatu\OneDrive\Desktop\Abiy\DirectFarm\DirectFarm.API\bin\Debug\net8.0\
 C:\Users\abatu\OneDrive\Desktop\Abiy\DirectFarm\DirectFarm.API\bin\Debug\net8.0\Minio.dll
 C:\Users\abatu\OneDrive\Desktop\Abiy\DirectFarm\DirectFarm.API\bin\Debug\net8.0\System.IO.Hashing.dll
 C:\Users\abatu\OneDrive\Desktop\Abiy\DirectFarm\DirectFarm.API\bin\Debug\net8.0\System.Reactive.dll
+C:\Users\abatu\OneDrive\Desktop\Abiy\DirectFarm\DirectFarm.API\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\abatu\OneDrive\Desktop\Abiy\DirectFarm\DirectFarm.API\bin\Debug\net8.0\Microsoft.IdentityModel.Abstractions.dll
+C:\Users\abatu\OneDrive\Desktop\Abiy\DirectFarm\DirectFarm.API\bin\Debug\net8.0\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\Users\abatu\OneDrive\Desktop\Abiy\DirectFarm\DirectFarm.API\bin\Debug\net8.0\Microsoft.IdentityModel.Logging.dll
+C:\Users\abatu\OneDrive\Desktop\Abiy\DirectFarm\DirectFarm.API\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.dll
+C:\Users\abatu\OneDrive\Desktop\Abiy\DirectFarm\DirectFarm.API\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:\Users\abatu\OneDrive\Desktop\Abiy\DirectFarm\DirectFarm.API\bin\Debug\net8.0\Microsoft.IdentityModel.Tokens.dll
+C:\Users\abatu\OneDrive\Desktop\Abiy\DirectFarm\DirectFarm.API\bin\Debug\net8.0\System.IdentityModel.Tokens.Jwt.dll
