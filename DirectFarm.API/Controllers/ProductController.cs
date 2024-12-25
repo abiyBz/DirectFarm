@@ -1,4 +1,5 @@
-﻿using DirectFarm.Core.Contracts.Command;
+﻿using DirectFarm.API.GetModel;
+using DirectFarm.Core.Contracts.Command;
 using DirectFarm.Core.Contracts.Query;
 using DirectFarm.Core.Entity;
 using Infrastracture.Base;
@@ -26,10 +27,22 @@ namespace DirectFarm.API.Controllers
             var result = await this.mediator.Send(new SaveProductCommand(product));
             return result;
         }
-        [HttpPost("GetAllProducts")]
+        [HttpGet("GetAllProducts")]
         public async Task<Response<List<ProductEntity>>> GetAllProducts()
         {
             var result = await this.mediator.Send(new GetAllProductsQuery());
+            return result;
+        }
+        [HttpPost("SaveProductImage")]
+        public async Task<Response<bool>> SaveProductImage(ProductImageEntity img)
+        {
+            var result = await this.mediator.Send(new SaveProductImageCommand(img));
+            return result;
+        }
+        [HttpPost("GetProductImage")]
+        public async Task<Response<string>> GetProductImage(BaseModel img)
+        {
+            var result = await this.mediator.Send(new GetProductImageQuery(img.Id));
             return result;
         }
     }

@@ -81,13 +81,39 @@
     "ContainingType": "DirectFarm.API.Controllers.ProductController",
     "Method": "GetAllProducts",
     "RelativePath": "api/Product/GetAllProducts",
-    "HttpMethod": "POST",
+    "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [],
     "ReturnTypes": [
       {
         "Type": "Infrastracture.Base.Response\u00601[[System.Collections.Generic.List\u00601[[DirectFarm.Core.Entity.ProductEntity, DirectFarm.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "DirectFarm.API.Controllers.ProductController",
+    "Method": "GetProductImage",
+    "RelativePath": "api/Product/GetProductImage",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "img",
+        "Type": "DirectFarm.API.GetModel.BaseModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "Infrastracture.Base.Response\u00601[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -114,6 +140,32 @@
     "ReturnTypes": [
       {
         "Type": "Infrastracture.Base.Response\u00601[[DirectFarm.Core.Entity.ProductEntity, DirectFarm.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "DirectFarm.API.Controllers.ProductController",
+    "Method": "SaveProductImage",
+    "RelativePath": "api/Product/SaveProductImage",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "img",
+        "Type": "DirectFarm.Core.Entity.ProductImageEntity",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "Infrastracture.Base.Response\u00601[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "MediaTypes": [
           "text/plain",
           "application/json",

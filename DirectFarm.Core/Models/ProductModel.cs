@@ -17,6 +17,10 @@ namespace DirectFarm.Core.Models
         public string unit { get; set; } = string.Empty;
         public DateTime created_at { get; set; } = DateTime.UtcNow;
         public string status { get; set; } = "available";
+        public string? image { get; set; }
+        public string? name_amharic { get; set; }
+        public string? description_amharic { get; set; }
+
 
         public ProductModel(ProductEntity entity) 
         {
@@ -28,6 +32,8 @@ namespace DirectFarm.Core.Models
             unit = entity.Unit;
             created_at = entity.CreatedAt;
             status = entity.Status;
+            name_amharic = entity.NameAmharic;
+            description_amharic = entity.DescriptionAmharic;
         }
         public ProductModel() { }
     }

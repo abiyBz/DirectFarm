@@ -99,5 +99,29 @@ namespace DirectFarm.API.Controllers
             else response.Message = "Payment Completed";
             return response;
         }
+
+        [HttpPost("Order")]
+        public async Task<Response<bool>> Order(OrderEntity orderId)
+        {
+            var response = new Response<bool>();
+
+            var request = new HttpRequestMessage
+            {
+                Method = HttpMethod.Get,
+                RequestUri = new Uri("https://api.chapa.co/v1/transaction/verify/" + orderId.ToString())
+            };
+            request.Headers.Add("Authorization", "Bearer CHASECK_TEST-mrwVfokQVSm1FUUfx1xFwsvbRsHW6BsX");
+
+            var responseChapa = await _httpClient.SendAsync(request);
+            response.Message = await responseChapa.Content.ReadAsStringAsync();
+            response.Data = responseChapa.IsSuccessStatusCode;
+
+            if (!responseChapa.IsSuccessStatusCode)
+            {
+                Console.WriteLine("Failed to initialize transaction with Chapa. Status Code: {StatusCode}, Response: {Response}");
+            }
+            else response.Message = "Payment Completed";
+            return response;
+        }
     }
 }
