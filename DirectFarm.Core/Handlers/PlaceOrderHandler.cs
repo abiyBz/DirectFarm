@@ -1,5 +1,7 @@
-﻿using DirectFarm.Core.Contracts.Query;
+﻿using DirectFarm.Core.Contracts.Command;
+using DirectFarm.Core.Contracts.Query;
 using DirectFarm.Core.Contracts.Repositories;
+using DirectFarm.Core.Entity;
 using Infrastracture.Base;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -11,23 +13,23 @@ using System.Threading.Tasks;
 
 namespace DirectFarm.Core.Handlers
 {
-    public class GetProductImageHandler : IRequestHandler<GetProductImageQuery, Response<string>>
+    public class PlaceOrderHandler : IRequestHandler<PlaceOrderCommand, Response<OrderEntity>>
     {
         IManageDirectFarmRepository repository;
-        ILogger<GetProductImageHandler> logger;
+        ILogger<PlaceOrderHandler> logger;
 
-        public GetProductImageHandler(IManageDirectFarmRepository repository, ILogger<GetProductImageHandler> logger)
+        public PlaceOrderHandler(IManageDirectFarmRepository repository, ILogger<PlaceOrderHandler> logger)
         {
             this.repository = repository;
             this.logger = logger;
         }
 
-        public async Task<Response<string>> Handle(GetProductImageQuery request, CancellationToken cancellationToken)
+        public async Task<Response<OrderEntity>> Handle(PlaceOrderCommand request, CancellationToken cancellationToken)
         {
-            var response = new Response<string>();
+            var response = new Response<OrderEntity>();
             try
             {
-                response.Data = System.Text.Encoding.UTF8.GetString(await this.repository.GetProductPicture(request.Id));
+                response.Data = await this.repository.PlaceOrder(request.param);
                 return response;
             }
             catch (Exception ex)

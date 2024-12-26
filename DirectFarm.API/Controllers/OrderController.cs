@@ -1,5 +1,6 @@
 ﻿using DirectFarm.API.GetModel;
 using DirectFarm.Core.Contracts.Query;
+using DirectFarm.Core.Contracts.Command;
 using DirectFarm.Core.Entity;
 using Infrastracture.Base;
 using MediatR;
@@ -67,7 +68,7 @@ namespace DirectFarm.API.Controllers
                 var responseObject = JsonDocument.Parse(responseContent);
                 var checkoutUrl = responseObject.RootElement.GetProperty("data").GetProperty("checkout_url").GetString();
                 response.Data = checkoutUrl;
-                response.Message = "Payment Successful!";
+                response.Message = "Payment request granted!";
                 return response;
             }
             else
@@ -95,33 +96,19 @@ namespace DirectFarm.API.Controllers
             if (!responseChapa.IsSuccessStatusCode)
             {
                 Console.WriteLine("Failed to initialize transaction with Chapa. Status Code: {StatusCode}, Response: {Response}");
+                await this.mediator.Send(new RecordPaymentCommand(orderId, false));
             }
-            else response.Message = "Payment Completed";
+            else 
+            {
+                response = await this.mediator.Send(new RecordPaymentCommand(orderId, true));
+            }
             return response;
         }
 
-        [HttpPost("Order")]
-        public async Task<Response<bool>> Order(OrderEntity orderId)
+        [HttpPost("PlaceOrder")]
+        public async Task<Response<OrderEntity>> PlaceOrder(SaveOrderModel order)
         {
-            var response = new Response<bool>();
-
-            var request = new HttpRequestMessage
-            {
-                Method = HttpMethod.Get,
-                RequestUri = new Uri("https://api.chapa.co/v1/transaction/verify/" + orderId.ToString())
-            };
-            request.Headers.Add("Authorization", "Bearer CHASECK_TEST-mrwVfokQVSm1FUUfx1xFwsvbRsHW6BsX");
-
-            var responseChapa = await _httpClient.SendAsync(request);
-            response.Message = await responseChapa.Content.ReadAsStringAsync();
-            response.Data = responseChapa.IsSuccessStatusCode;
-
-            if (!responseChapa.IsSuccessStatusCode)
-            {
-                Console.WriteLine("Failed to initialize transaction with Chapa. Status Code: {StatusCode}, Response: {Response}");
-            }
-            else response.Message = "Payment Completed";
-            return response;
+            return await this.mediator.Send(new PlaceOrderCommand(order.toOrderEntity()));
         }
     }
 }

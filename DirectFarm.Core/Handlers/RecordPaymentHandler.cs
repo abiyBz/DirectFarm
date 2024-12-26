@@ -1,5 +1,6 @@
-﻿using DirectFarm.Core.Contracts.Query;
+﻿using DirectFarm.Core.Contracts.Command;
 using DirectFarm.Core.Contracts.Repositories;
+using DirectFarm.Core.Entity;
 using Infrastracture.Base;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -11,23 +12,24 @@ using System.Threading.Tasks;
 
 namespace DirectFarm.Core.Handlers
 {
-    public class GetProductImageHandler : IRequestHandler<GetProductImageQuery, Response<string>>
+    public class RecordPaymentHandler : IRequestHandler<RecordPaymentCommand, Response<bool>>
     {
         IManageDirectFarmRepository repository;
-        ILogger<GetProductImageHandler> logger;
+        ILogger<RecordPaymentHandler> logger;
 
-        public GetProductImageHandler(IManageDirectFarmRepository repository, ILogger<GetProductImageHandler> logger)
+        public RecordPaymentHandler(IManageDirectFarmRepository repository, ILogger<RecordPaymentHandler> logger)
         {
             this.repository = repository;
             this.logger = logger;
         }
 
-        public async Task<Response<string>> Handle(GetProductImageQuery request, CancellationToken cancellationToken)
+        public async Task<Response<bool>> Handle(RecordPaymentCommand request, CancellationToken cancellationToken)
         {
-            var response = new Response<string>();
-            try
+            var response = new Response<bool>();
+            try 
             {
-                response.Data = System.Text.Encoding.UTF8.GetString(await this.repository.GetProductPicture(request.Id));
+                response.Message = "Payment Completed";
+                response.Data = await repository.recordPayment(request.param, request.success);
                 return response;
             }
             catch (Exception ex)

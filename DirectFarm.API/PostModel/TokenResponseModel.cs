@@ -1,4 +1,5 @@
-﻿using DirectFarm.Core.Entity;
+﻿using DirectFarm.API.UtilModels;
+using DirectFarm.Core.Entity;
 
 namespace DirectFarm.API.PostModel
 {
@@ -11,7 +12,7 @@ namespace DirectFarm.API.PostModel
         //[JsonPropertyName("refresh_expires_in")]
         //public int RefreshExpiresIn { get; set; }
         public TokenResponseModel() { }
-        public TokenResponseModel(CustomerEntity tokenEntity) 
+        public TokenResponseModel(TokenModel tokenEntity) 
         {
             AccessToken = tokenEntity.AccessToken;
             ExpiresIn = tokenEntity.ExpiresIn;

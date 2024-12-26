@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Text;
 using DirectFarm.Core.Entity;
+using DirectFarm.API.UtilModels;
 
 namespace DirectFarm.API.Controllers
 {
@@ -35,7 +36,6 @@ namespace DirectFarm.API.Controllers
                 var entity = await IsValidUser(login.Email, login.Password);
                 if (entity != null) // Example validation
                 {
-                    entity.Email = login.Email;
                     //await this.mediator.Send(new SaveTokenCommand(entity));
                     response.Message = "Login successful!";
                     response.Data = new TokenResponseModel(entity);
@@ -51,7 +51,7 @@ namespace DirectFarm.API.Controllers
             return response;
         }
 
-        private async Task<CustomerEntity> IsValidUser(string email, string password)
+        private async Task<TokenModel> IsValidUser(string email, string password)
         {
             var tokenEndpoint = _configuration["Keycloak:AuthorizationUrltok"];
             string Cid = _configuration["Keycloak:client_id"];
@@ -75,7 +75,7 @@ namespace DirectFarm.API.Controllers
                 var responseContent = await response.Content.ReadAsStringAsync();
                 if (response.IsSuccessStatusCode)
                 {
-                    var tokenResponse = JsonSerializer.Deserialize<CustomerEntity>(responseContent);
+                    var tokenResponse = JsonSerializer.Deserialize<TokenModel>(responseContent);
                     return tokenResponse;
                     // Example of making an authorized API call using the access token
                 }

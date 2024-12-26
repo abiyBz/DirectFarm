@@ -36,6 +36,10 @@ namespace DirectFarm.Core.Entity
             NameAmharic = model.name_amharic;
             DescriptionAmharic = model.description_amharic;
         }
+        public ProductEntity(Guid id) 
+        {
+            Id = id;
+        }
         public static List<ProductEntity> ModeltoEntityList(List<ProductModel> models)
         {
             if (models == null || !models.Any())
@@ -52,6 +56,16 @@ namespace DirectFarm.Core.Entity
                 CreatedAt = model.created_at,
                 Status = model.status,
             }).ToList();
+        }
+        public static List<ProductEntity> IdtoEntityList(List<Guid> id) 
+        {
+            var products = new List<ProductEntity>();
+
+            foreach (var item in id) 
+            {
+                products.Add(new ProductEntity(item));
+            }
+            return products;
         }
 
     }

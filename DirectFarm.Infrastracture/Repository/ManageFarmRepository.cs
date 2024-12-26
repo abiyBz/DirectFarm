@@ -5,9 +5,12 @@ using DirectFarm.Infrastracture.Context;
 using Infrastracture.Base;
 using Infrastracture.Base.EF;
 using Infrastracture.Base.EF.Minio;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+using Minio.DataModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -116,6 +119,66 @@ namespace DirectFarm.Infrastracture.Repository
 
             else throw new Exception("No picture found");
 
+        }
+        
+        public async Task<OrderEntity>  PlaceOrder(OrderEntity order) 
+        {
+            var products = new List<ProductModel>();
+            var customer = await FindOneAsync<CustomerModel>(c => c.customer_id == order.customer.Id);
+            if (order.ProductOrders == null || order.ProductOrders.Count == 0 || customer == null) throw new Exception("Neccessary Information is missing!"); 
+            order.TotalAmount = 0;
+            int num = 1;
+            foreach(var item in order.ProductOrders) 
+            {
+                var product = await FindOneAsync<ProductModel>(x => x.product_id == item.Product.Id);
+                if (product == null)
+                {
+                    throw new Exception("Product "+ num.ToString() + " doesnt exist!");
+                }
+                item.PriceAtPurchase = product.price_per_unit;
+                item.Product = new ProductEntity(product);
+                item.Amount = item.PriceAtPurchase * item.Quantity;
+                order.TotalAmount += item.Amount;
+                num++;
+            }
+            order.customer = new CustomerEntity(customer);
+            var ordermodel = new OrderModel(order);
+            if(order.Id != Guid.Empty) 
+            {
+                var orderdelete = await FindOneAsync<OrderModel>(x => x.order_id== order.Id);
+                if (orderdelete != null) 
+                {
+                    if (orderdelete.isPayed()) throw new Exception("Payment already made");
+                    await DeleteAsync<ProductOrderModel>(x => x.order_id == order.Id);
+                    await UnitOfWork.SaveChanges();
+                    await DeleteAsync<OrderModel>(orderdelete);
+                    await UnitOfWork.SaveChanges();
+                }
+            }
+            await AddAsync<OrderModel>(ordermodel);
+            await UnitOfWork.SaveChanges();
+            order.Id = ordermodel.order_id;
+            var tasks = new List<Task>();
+            foreach (var item in order.ProductOrders)
+            {
+                tasks.Add(AddAsync<ProductOrderModel>(new ProductOrderModel(item, order.Id)));
+            }
+            await Task.WhenAll(tasks);
+            await UnitOfWork.SaveChanges();
+
+            return order;
+        }
+
+        public async Task<bool> recordPayment(Guid Id, bool success) 
+        {
+            var order = await FindOneAsync<OrderModel>(x=> x.order_id == Id);
+            if (order == null) throw new Exception("No such order made");
+            if(success)order.Success();
+            else order.failure();
+            order.orderdate = SetKindUtc(order.orderdate);
+            await UpdateAsync<OrderModel>(order);
+            await UnitOfWork.SaveChanges();
+            return true;
         }
     }
 }

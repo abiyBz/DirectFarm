@@ -15,6 +15,6 @@ namespace DirectFarm.Core.Models
         public string address { get; set; } = string.Empty;
         public DateTime registration_date { get; set; } = DateTime.UtcNow;
         public string status { get; set; } = "active";
-        public string? refresh_token { get; set; }
+        public string? refresh_token { get; set; } = string.Empty;
     }
 }
