@@ -11,11 +11,19 @@ namespace DirectFarm.API.PostModel
         public int ExpiresIn { get; set; }
         //[JsonPropertyName("refresh_expires_in")]
         //public int RefreshExpiresIn { get; set; }
+        public CustomerEntity? Customer { get; set; }
         public TokenResponseModel() { }
         public TokenResponseModel(TokenModel tokenEntity) 
         {
             AccessToken = tokenEntity.AccessToken;
             ExpiresIn = tokenEntity.ExpiresIn;
+        }
+
+        public TokenResponseModel(TokenModel tokenEntity, CustomerEntity? customer)
+        {
+            AccessToken = tokenEntity.AccessToken;
+            ExpiresIn = tokenEntity.ExpiresIn;
+            Customer = customer;
         }
         //public TokenResponseModel(TokenEntity tokenEntity)
         //{

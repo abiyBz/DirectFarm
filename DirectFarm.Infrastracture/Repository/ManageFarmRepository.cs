@@ -7,6 +7,7 @@ using Infrastracture.Base.EF;
 using Infrastracture.Base.EF.Minio;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using Minio.DataModel;
+using Minio.DataModel.Notification;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -179,6 +180,59 @@ namespace DirectFarm.Infrastracture.Repository
             await UpdateAsync<OrderModel>(order);
             await UnitOfWork.SaveChanges();
             return true;
+        }
+
+        public async Task<CustomerModel> SaveCustomer(CustomerEntity entity) 
+        {
+            var model = new CustomerModel(entity);
+            if (entity.Id <= Guid.Empty)
+            {
+                model.registration_date = DateTime.UtcNow;
+                await AddAsync<CustomerModel>(model);
+                await UnitOfWork.SaveChanges();
+            }
+            else
+            {
+                var updateModel = await FindOneAsync<CustomerModel>(x => x.customer_id == entity.Id);
+                if (updateModel != null)
+                {
+                    model.customer_id = entity.Id;
+                    model.registration_date = SetKindUtc(model.registration_date);
+                    await UpdateAsync<CustomerModel>(model);
+                    await UnitOfWork.SaveChanges();
+                }
+                else
+                {
+                    throw new Exception("Customer doesn't exist!");
+                }
+            }
+            return model;
+        }
+
+        public async Task<CustomerModel> RegsiterCustomer (CustomerEntity entity, string Refreshtoken)
+        {
+            var model = new CustomerModel(entity, Refreshtoken);
+            entity.Id = Guid.Empty;
+            model.registration_date = DateTime.UtcNow;
+            await AddAsync<CustomerModel>(model);
+            await UnitOfWork.SaveChanges();
+            return model;
+        }
+
+        public async Task<CustomerModel> SaveRefreshToken(string email, string refreshtoken) 
+        {
+            var model = await FindOneAsync<CustomerModel>(x => x.email == email);
+            model.refresh_token = refreshtoken;
+            model.registration_date = SetKindUtc(model.registration_date);
+            await UpdateAsync<CustomerModel>(model);
+            //await UnitOfWork.SaveChanges();
+            return model;
+        }
+
+        public async Task<string> GetRefreshToken(string email)
+        {
+            var repsonse = await FindOneAsync<CustomerModel>(x=>x.email == email);
+            return repsonse.refresh_token;
         }
     }
 }

@@ -26,6 +26,58 @@
     ]
   },
   {
+    "ContainingType": "DirectFarm.API.Controllers.CustomerController",
+    "Method": "Refresh",
+    "RelativePath": "api/Customer/Refresh",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "email",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "Infrastracture.Base.Response\u00601[[DirectFarm.API.PostModel.TokenResponseModel, DirectFarm.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "DirectFarm.API.Controllers.CustomerController",
+    "Method": "RegisterAndLogin",
+    "RelativePath": "api/Customer/Register",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "register",
+        "Type": "DirectFarm.API.GetModel.RegisterRequestModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "Infrastracture.Base.Response\u00601[[DirectFarm.API.PostModel.TokenResponseModel, DirectFarm.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "DirectFarm.API.Controllers.OrderController",
     "Method": "PaymentInitialize",
     "RelativePath": "api/Order/IntializePayment",

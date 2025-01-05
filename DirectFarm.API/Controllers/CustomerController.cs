@@ -9,6 +9,9 @@ using System.Text.Json;
 using System.Text;
 using DirectFarm.Core.Entity;
 using DirectFarm.API.UtilModels;
+using DirectFarm.Core.Contracts.Command;
+using Microsoft.AspNetCore.Authorization;
+using DirectFarm.Core.Contracts.Query;
 
 namespace DirectFarm.API.Controllers
 {
@@ -33,12 +36,12 @@ namespace DirectFarm.API.Controllers
             var response = new Response<TokenResponseModel>();
             try
             {
-                var entity = await IsValidUser(login.Email, login.Password);
-                if (entity != null) // Example validation
+                var model = await IsValidUser(login.Email, login.Password);
+                if (model != null) // Example validation
                 {
-                    //await this.mediator.Send(new SaveTokenCommand(entity));
+                    var entity = await this.mediator.Send(new SaveTokenCommand(login.Email, model.RefreshToken));
+                    response.Data = new TokenResponseModel(model, entity.Data);
                     response.Message = "Login successful!";
-                    response.Data = new TokenResponseModel(entity);
                 }
                 else
                     response.Message = "Login failed!";
@@ -61,6 +64,7 @@ namespace DirectFarm.API.Controllers
                 // Handle missing configuration
                 throw new Exception("Keycloak configuration is missing.");
             }
+
 
             // Prepare the request payload
             var payload = new StringContent(
@@ -87,5 +91,211 @@ namespace DirectFarm.API.Controllers
             }
 
         }
+
+        [HttpPost("Register")]
+        public async Task<Response<TokenResponseModel>> RegisterAndLogin(RegisterRequestModel register)
+        {
+            var response = new Response<TokenResponseModel>();
+            try
+            {
+                // Step 1: Register the user in Keycloak
+                var registerResult = await RegisterUser(register);
+                if (!registerResult.IsSuccessStatusCode)
+                {
+                    response.Message = $"Registration failed: {registerResult.Content}";
+                    return response;
+                }
+
+                // Step 2: Attempt login for the newly registered user
+
+                var model = await IsValidUser(register.Email, register.Password);
+                if (model != null) // Example validation
+                {
+                    var entity = await this.mediator.Send(new RegisterCustomerCommand(register.toCustomer(), model.RefreshToken));
+                    response.Data = new TokenResponseModel(model, entity.Data);
+                    response.Message = "Registration successful!";
+                }
+                else
+                    response.Message = "Registration failed!";
+            }
+            catch (Exception ex)
+            {
+                response.Ex = ex;
+                response.Message = ex.Message;
+            }
+            return response;
+        }
+
+        private async Task<HttpResponseMessage> RegisterUser(RegisterRequestModel register)
+        {
+            var registrationEndpoint = _configuration["Keycloak:UserRegistrationUrl"];
+            string adminToken = await GetAdminAccessToken(); // Obtain admin token to create a user in Keycloak
+
+            if (string.IsNullOrEmpty(registrationEndpoint) || string.IsNullOrEmpty(adminToken))
+            {
+                throw new Exception("Keycloak registration configuration is missing.");
+            }
+
+            var userPayload = new
+            {
+                username = register.Email,
+                email = register.Email,
+                firstName = register.FirstName,
+                lastName = register.LastName,
+                enabled = true,
+                credentials = new[]
+                {
+                    new
+                    {
+                        type = "password",
+                        value = register.Password,
+                        temporary = false
+                    }
+                }
+            };
+
+            var jsonPayload = JsonSerializer.Serialize(userPayload);
+            var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
+            
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", adminToken);
+                return await httpClient.PostAsync(registrationEndpoint, content);
+            }
+        
+        }
+
+        private async Task<string> GetAdminAccessToken()
+        {
+            var tokenEndpoint = _configuration["Keycloak:AdminTokenUrl"];
+            string adminCid = _configuration["Keycloak:AdminClientId"];
+            string adminCsecret = _configuration["Keycloak:AdminClientSecret"];
+            string adminUsername = _configuration["Keycloak:AdminUsername"];
+            string adminPassword = _configuration["Keycloak:AdminPassword"];
+
+            if (string.IsNullOrEmpty(tokenEndpoint) || string.IsNullOrEmpty(adminCid) || string.IsNullOrEmpty(adminCsecret))
+            {
+                throw new Exception("Keycloak admin configuration is missing.");
+            }
+
+            var payload = new StringContent(
+                $"grant_type=password&username={adminUsername}&password={adminPassword}&client_id={adminCid}&client_secret={adminCsecret}",
+                Encoding.UTF8,
+                "application/x-www-form-urlencoded");
+            
+            using (var httpClient = new HttpClient())
+            {
+                var response = await httpClient.PostAsync(tokenEndpoint, payload);
+                var responseContent = await response.Content.ReadAsStringAsync();
+                if (response.IsSuccessStatusCode)
+                {
+                    var tokenResponse = JsonSerializer.Deserialize<TokenModel>(responseContent);
+                    return tokenResponse?.AccessToken ?? throw new Exception("Failed to retrieve admin token.");
+                }
+                else
+                {
+                    throw new Exception($"Admin token request failed: {responseContent}");
+                }
+            }
+        }
+
+        [HttpPost("Refresh")]
+        public async Task<Response<TokenResponseModel>> Refresh(string email)
+        {
+            var response = new Response<TokenResponseModel>();
+            try
+            {
+                var tokenEndpoint = _configuration["Keycloak:AuthorizationUrltok"];
+                string clientId = _configuration["Keycloak:client_id"];
+                string clientSecret = _configuration["Keycloak:client_secret"];
+
+                if (string.IsNullOrEmpty(tokenEndpoint) || string.IsNullOrEmpty(clientId) || string.IsNullOrEmpty(clientSecret))
+                {
+                    throw new Exception("Keycloak configuration is missing.");
+                }
+                var refreshToken = await this.mediator.Send(new GetRefreshTokenQuery(email));
+
+                // Prepare the request payload
+                var payload = new StringContent(
+                    $"grant_type=refresh_token&refresh_token={refreshToken.Data}&client_id={clientId}&client_secret={clientSecret}",
+                    Encoding.UTF8,
+                    "application/x-www-form-urlencoded");
+
+                using (var httpClient = new HttpClient())
+                {
+                    var refreshResponse = await httpClient.PostAsync(tokenEndpoint, payload);
+                    var responseContent = await refreshResponse.Content.ReadAsStringAsync();
+
+                    if (refreshResponse.IsSuccessStatusCode)
+                    {
+                        var tokenEntity = JsonSerializer.Deserialize<TokenModel>(responseContent);
+                        response.Data = new TokenResponseModel(tokenEntity);
+                        response.Message = "Token refreshed successfully!";
+                    }
+                    else
+                    {
+                        response.Message = "Failed to refresh token.";
+                        response.Ex = new Exception($"Keycloak error: {responseContent}");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.Ex = ex;
+            }
+
+            return response;
+        }
+        /*
+        [Authorize]
+        [HttpDelete("LogOut")]
+        public async Task<Response<bool>> Logout(string email)
+        {
+            var response = new Response<bool>();
+            try
+            {
+                var logoutEndpoint = _configuration["Keycloak:LogoutUrl"];
+                string clientId = _configuration["Keycloak:client_id"];
+                string clientSecret = _configuration["Keycloak:client_secret"];
+
+                if (string.IsNullOrEmpty(logoutEndpoint) || string.IsNullOrEmpty(clientId) || string.IsNullOrEmpty(clientSecret))
+                {
+                    throw new Exception("Keycloak configuration is missing.");
+                }
+
+                var refreshToken = await this.mediator.Send(new GetTokenQuery(email));
+                // Prepare the request payload
+                var payload = new StringContent(
+                    $"client_id={clientId}&client_secret={clientSecret}&refresh_token={refreshToken.Data.RefreshToken}",
+                    Encoding.UTF8,
+                    "application/x-www-form-urlencoded");
+
+                using (var httpClient = new HttpClient())
+                {
+                    var logoutResponse = await httpClient.PostAsync(logoutEndpoint, payload);
+                    var responseContent = await logoutResponse.Content.ReadAsStringAsync();
+
+                    if (logoutResponse.IsSuccessStatusCode)
+                    {
+                        var model = await this.mediator.Send(new DeleteTokenCommand(email));
+                        response.Data = model.Data;
+                        response.Message = "The user has been logged out.";
+                    }
+                    else
+                    {
+                        response.Message = "Failed to logout.";
+                        response.Ex = new Exception($"Keycloak error: {responseContent}");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.Ex = ex;
+            }
+
+            return response;
+        }*/
     }
 }

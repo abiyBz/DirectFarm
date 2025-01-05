@@ -18,5 +18,9 @@ namespace DirectFarm.Core.Contracts.Repositories
         public Task<byte[]> GetProductPicture(Guid id);
         public Task<OrderEntity> PlaceOrder(OrderEntity order);
         public Task<bool> recordPayment(Guid Id, bool success);
+        public Task<CustomerModel> SaveCustomer(CustomerEntity entity);
+        public Task<CustomerModel> SaveRefreshToken(string email, string refreshtoken);
+        public Task<CustomerModel> RegsiterCustomer(CustomerEntity entity, string Refreshtoken);
+        public Task<string> GetRefreshToken(string email);
     }
 }

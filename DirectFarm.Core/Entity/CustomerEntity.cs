@@ -20,6 +20,16 @@ namespace DirectFarm.Core.Entity
         public string Status { get; set; } = "active";
 
         public CustomerEntity() { }
+        public CustomerEntity(Guid Id, string Name, string Email, string Phone, string Address) 
+        {
+            this.Id = Id;
+            this.Name = Name;
+            this.Email = Email;
+            this.Phone = Phone;
+            this.Address = Address;
+            this.RegistrationDate = DateTime.UtcNow;
+            this.Status = "active";
+        }
         public CustomerEntity(Guid id) 
         {
             Id = id;
