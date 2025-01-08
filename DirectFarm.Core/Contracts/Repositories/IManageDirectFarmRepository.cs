@@ -22,5 +22,7 @@ namespace DirectFarm.Core.Contracts.Repositories
         public Task<CustomerModel> SaveRefreshToken(string email, string refreshtoken);
         public Task<CustomerModel> RegsiterCustomer(CustomerEntity entity, string Refreshtoken);
         public Task<string> GetRefreshToken(string email);
+        public void DeleteProduct(Guid productId);
+        public Task<List<OrderModel>> GetCustomerOrders(Guid Id);
     }
 }

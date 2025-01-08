@@ -20,7 +20,7 @@ namespace DirectFarm.Core.Models
         public string? image { get; set; }
         public string? name_amharic { get; set; }
         public string? description_amharic { get; set; }
-
+        //public int amount { get; set; }
 
         public ProductModel(ProductEntity entity) 
         {

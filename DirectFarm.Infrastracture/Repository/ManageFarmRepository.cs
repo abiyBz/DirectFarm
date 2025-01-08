@@ -20,11 +20,11 @@ namespace DirectFarm.Infrastracture.Repository
     public class ManageFarmRepository : GenericRepository, IManageDirectFarmRepository
     {
         private readonly MinioDocumentService _minioDocumentService;
-        public ManageFarmRepository(DirectFarmContext context, MinioDocumentService minioDocumentService): base(context) 
+        public ManageFarmRepository(DirectFarmContext context, MinioDocumentService minioDocumentService) : base(context)
         {
             _minioDocumentService = minioDocumentService;
         }
-        public async Task<ProductModel>  SaveProduct(ProductEntity product) 
+        public async Task<ProductModel> SaveProduct(ProductEntity product)
         {
             var model = new ProductModel(product);
             if (product.Id <= Guid.Empty)
@@ -33,10 +33,10 @@ namespace DirectFarm.Infrastracture.Repository
                 await AddAsync<ProductModel>(model);
                 await UnitOfWork.SaveChanges();
             }
-            else 
+            else
             {
-                var updateModel = await FindOneAsync<ProductModel>(x=> x.product_id == product.Id);
-                if (updateModel != null) 
+                var updateModel = await FindOneAsync<ProductModel>(x => x.product_id == product.Id);
+                if (updateModel != null)
                 {
                     model.product_id = product.Id;
                     model.image = updateModel.image;
@@ -50,17 +50,17 @@ namespace DirectFarm.Infrastracture.Repository
             }
             return model;
         }
-        public async Task<OrderModel> GetOrderforPayment (Guid Id) 
+        public async Task<OrderModel> GetOrderforPayment(Guid Id)
         {
             return await FindOneAsync<OrderModel>(x => x.order_id == Id);
         }
-        public async Task<List<ProductModel>> GetAllProducts() 
+        public async Task<List<ProductModel>> GetAllProducts()
         {
             var response = await GetAllAsync<ProductModel>();
             return response.ToList();
         }
 
-        public async Task<bool> SaveProductPic (ProductImageEntity entity)
+        public async Task<bool> SaveProductPic(ProductImageEntity entity)
         {
             var fileType = Path.GetExtension(entity.FileName)?.ToLower();
             DocumentBase documentBase = new DocumentBase
@@ -116,25 +116,26 @@ namespace DirectFarm.Infrastracture.Repository
                     Extension = fileType,
                 };
                 var img = _minioDocumentService.GetDocumentAsByteArray(documentRequestBase);
-                return img.Result.Data.Content;            }
+                return img.Result.Data.Content;
+            }
 
             else throw new Exception("No picture found");
 
         }
-        
-        public async Task<OrderEntity>  PlaceOrder(OrderEntity order) 
+
+        public async Task<OrderEntity> PlaceOrder(OrderEntity order)
         {
             var products = new List<ProductModel>();
             var customer = await FindOneAsync<CustomerModel>(c => c.customer_id == order.customer.Id);
-            if (order.ProductOrders == null || order.ProductOrders.Count == 0 || customer == null) throw new Exception("Neccessary Information is missing!"); 
+            if (order.ProductOrders == null || order.ProductOrders.Count == 0 || customer == null) throw new Exception("Neccessary Information is missing!");
             order.TotalAmount = 0;
             int num = 1;
-            foreach(var item in order.ProductOrders) 
+            foreach (var item in order.ProductOrders)
             {
                 var product = await FindOneAsync<ProductModel>(x => x.product_id == item.Product.Id);
                 if (product == null)
                 {
-                    throw new Exception("Product "+ num.ToString() + " doesnt exist!");
+                    throw new Exception("Product " + num.ToString() + " doesnt exist!");
                 }
                 item.PriceAtPurchase = product.price_per_unit;
                 item.Product = new ProductEntity(product);
@@ -144,10 +145,10 @@ namespace DirectFarm.Infrastracture.Repository
             }
             order.customer = new CustomerEntity(customer);
             var ordermodel = new OrderModel(order);
-            if(order.Id != Guid.Empty) 
+            if (order.Id != Guid.Empty)
             {
-                var orderdelete = await FindOneAsync<OrderModel>(x => x.order_id== order.Id);
-                if (orderdelete != null) 
+                var orderdelete = await FindOneAsync<OrderModel>(x => x.order_id == order.Id);
+                if (orderdelete != null)
                 {
                     if (orderdelete.isPayed()) throw new Exception("Payment already made");
                     await DeleteAsync<ProductOrderModel>(x => x.order_id == order.Id);
@@ -170,11 +171,11 @@ namespace DirectFarm.Infrastracture.Repository
             return order;
         }
 
-        public async Task<bool> recordPayment(Guid Id, bool success) 
+        public async Task<bool> recordPayment(Guid Id, bool success)
         {
-            var order = await FindOneAsync<OrderModel>(x=> x.order_id == Id);
+            var order = await FindOneAsync<OrderModel>(x => x.order_id == Id);
             if (order == null) throw new Exception("No such order made");
-            if(success)order.Success();
+            if (success) order.Success();
             else order.failure();
             order.orderdate = SetKindUtc(order.orderdate);
             await UpdateAsync<OrderModel>(order);
@@ -182,7 +183,7 @@ namespace DirectFarm.Infrastracture.Repository
             return true;
         }
 
-        public async Task<CustomerModel> SaveCustomer(CustomerEntity entity) 
+        public async Task<CustomerModel> SaveCustomer(CustomerEntity entity)
         {
             var model = new CustomerModel(entity);
             if (entity.Id <= Guid.Empty)
@@ -209,7 +210,7 @@ namespace DirectFarm.Infrastracture.Repository
             return model;
         }
 
-        public async Task<CustomerModel> RegsiterCustomer (CustomerEntity entity, string Refreshtoken)
+        public async Task<CustomerModel> RegsiterCustomer(CustomerEntity entity, string Refreshtoken)
         {
             var model = new CustomerModel(entity, Refreshtoken);
             entity.Id = Guid.Empty;
@@ -219,7 +220,7 @@ namespace DirectFarm.Infrastracture.Repository
             return model;
         }
 
-        public async Task<CustomerModel> SaveRefreshToken(string email, string refreshtoken) 
+        public async Task<CustomerModel> SaveRefreshToken(string email, string refreshtoken)
         {
             var model = await FindOneAsync<CustomerModel>(x => x.email == email);
             model.refresh_token = refreshtoken;
@@ -231,8 +232,19 @@ namespace DirectFarm.Infrastracture.Repository
 
         public async Task<string> GetRefreshToken(string email)
         {
-            var repsonse = await FindOneAsync<CustomerModel>(x=>x.email == email);
+            var repsonse = await FindOneAsync<CustomerModel>(x => x.email == email);
             return repsonse.refresh_token;
         }
+        public async void DeleteProduct(Guid productId)
+        {
+            await DeleteAsync<ProductModel>(x => x.product_id == productId);
+        }
+
+        public async Task<List<OrderModel>> GetCustomerOrders (Guid Id)
+        {
+            var orderModels = await FindAsync<OrderModel>(x => x.customer_id == Id);
+            var list = orderModels.ToList();
+            return list;
+        }
     }
-}
+    }

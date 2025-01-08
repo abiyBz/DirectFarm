@@ -12,6 +12,7 @@ using DirectFarm.API.UtilModels;
 using DirectFarm.Core.Contracts.Command;
 using Microsoft.AspNetCore.Authorization;
 using DirectFarm.Core.Contracts.Query;
+using Microsoft.Win32;
 
 namespace DirectFarm.API.Controllers
 {
@@ -247,55 +248,12 @@ namespace DirectFarm.API.Controllers
 
             return response;
         }
-        /*
-        [Authorize]
-        [HttpDelete("LogOut")]
-        public async Task<Response<bool>> Logout(string email)
+
+        [HttpPost("GetCustomerOrders")]
+        public async Task<Response<List<OrderEntity>>> GetCustomerOrders(BaseModel model) 
         {
-            var response = new Response<bool>();
-            try
-            {
-                var logoutEndpoint = _configuration["Keycloak:LogoutUrl"];
-                string clientId = _configuration["Keycloak:client_id"];
-                string clientSecret = _configuration["Keycloak:client_secret"];
-
-                if (string.IsNullOrEmpty(logoutEndpoint) || string.IsNullOrEmpty(clientId) || string.IsNullOrEmpty(clientSecret))
-                {
-                    throw new Exception("Keycloak configuration is missing.");
-                }
-
-                var refreshToken = await this.mediator.Send(new GetTokenQuery(email));
-                // Prepare the request payload
-                var payload = new StringContent(
-                    $"client_id={clientId}&client_secret={clientSecret}&refresh_token={refreshToken.Data.RefreshToken}",
-                    Encoding.UTF8,
-                    "application/x-www-form-urlencoded");
-
-                using (var httpClient = new HttpClient())
-                {
-                    var logoutResponse = await httpClient.PostAsync(logoutEndpoint, payload);
-                    var responseContent = await logoutResponse.Content.ReadAsStringAsync();
-
-                    if (logoutResponse.IsSuccessStatusCode)
-                    {
-                        var model = await this.mediator.Send(new DeleteTokenCommand(email));
-                        response.Data = model.Data;
-                        response.Message = "The user has been logged out.";
-                    }
-                    else
-                    {
-                        response.Message = "Failed to logout.";
-                        response.Ex = new Exception($"Keycloak error: {responseContent}");
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                response.Message = ex.Message;
-                response.Ex = ex;
-            }
-
+            var response = await this.mediator.Send(new GetCustomerOrdersQuery(model.Id));
             return response;
-        }*/
+        }
     }
 }

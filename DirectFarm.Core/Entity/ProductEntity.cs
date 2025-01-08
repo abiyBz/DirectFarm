@@ -21,6 +21,7 @@ namespace DirectFarm.Core.Entity
         //public string? Image { get; set; }
         public string? NameAmharic { get; set; }
         public string? DescriptionAmharic { get; set; }
+        public int quantity {  get; set; }
         public ProductEntity() { }
         public ProductEntity(ProductModel model) 
         {
@@ -35,6 +36,7 @@ namespace DirectFarm.Core.Entity
             //Image = model.image;
             NameAmharic = model.name_amharic;
             DescriptionAmharic = model.description_amharic;
+            //quantity = model.amount;
         }
         public ProductEntity(Guid id) 
         {

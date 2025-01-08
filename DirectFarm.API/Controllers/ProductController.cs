@@ -45,5 +45,11 @@ namespace DirectFarm.API.Controllers
             var result = await this.mediator.Send(new GetProductImageQuery(img.Id));
             return result;
         }
+        [HttpDelete("DeleteProduct")]
+        public async Task<Response<bool>> Delete(BaseModel model)
+        {
+            var result = await this.mediator.Send(new DeleteProductCommand(model.Id));
+            return result;
+        }
     }
 }

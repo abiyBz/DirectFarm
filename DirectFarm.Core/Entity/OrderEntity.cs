@@ -46,5 +46,29 @@ namespace DirectFarm.Core.Entity
             this.customer = customer;
             this.ProductOrders = productOrders;
         }
+        public OrderEntity(OrderModel model, List<ProductOrderEntity> productOrders)
+        {
+            Id = model.order_id;
+            TotalAmount = model.total_amount;
+            Status = model.status;
+            Orderdate = model.orderdate;
+            PaymentDate = model.paymentdate;
+            this.customer = new CustomerEntity();
+            this.ProductOrders = productOrders;
+        }
+        public static List<OrderEntity> toEntityList(List<OrderModel> models) 
+        {
+            if (models == null || !models.Any())
+                return new List<OrderEntity>();
+
+            return models.Select(model => new OrderEntity
+            {
+                Id = model.order_id,
+                TotalAmount = model.total_amount,
+                Status = model.status,
+                Orderdate = model.orderdate,
+                PaymentDate = model.paymentdate
+            }).ToList();
+        }
     }
 }
