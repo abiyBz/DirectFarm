@@ -49,6 +49,8 @@ namespace DirectFarm.Core.Entity
             {
                 Id = model.product_id,
                 Name = model.name,
+                NameAmharic = model.name_amharic,
+                DescriptionAmharic = model.name_amharic,
                 Description = model.description,
                 Category = model.category,
                 PricePerUnit = model.price_per_unit,

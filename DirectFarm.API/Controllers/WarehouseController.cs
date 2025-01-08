@@ -1,12 +1,21 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using System.Net.Http;
 
 namespace DirectFarm.API.Controllers
 {
-    public class WarehouseController : Controller
+    [ApiController]
+    [Route("api/[controller]")]
+    public class WarehouseController : ControllerBase
     {
-        public IActionResult Index()
+        private readonly ILogger<WarehouseController> _logger;
+        private readonly IMediator mediator;
+        public WarehouseController(ILogger<WarehouseController> logger, IMediator mediator)
         {
-            return View();
+            _logger = logger;
+            this.mediator = mediator;
         }
+
+        
     }
 }
