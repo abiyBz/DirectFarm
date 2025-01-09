@@ -24,5 +24,6 @@ namespace DirectFarm.Core.Contracts.Repositories
         public Task<string> GetRefreshToken(string email);
         public void DeleteProduct(Guid productId);
         public Task<List<OrderModel>> GetCustomerOrders(Guid Id);
+        public Task<ProductModel> GetProduct(Guid Id);
     }
 }

@@ -246,5 +246,9 @@ namespace DirectFarm.Infrastracture.Repository
             var list = orderModels.ToList();
             return list;
         }
+        public async Task<ProductModel> GetProduct(Guid Id) 
+        {
+            return await FindOneAsync<ProductModel>(x=> x.product_id == Id);
+        }
     }
     }

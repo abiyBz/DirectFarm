@@ -24,23 +24,17 @@ namespace DirectFarm.API.Controllers
             _httpClient = httpClient;
         }
         [HttpPost("IntializePayment")]//, Authorize]
-        public async Task<Response<String>> PaymentInitialize(Guid orderId)
+        public async Task<Response<String>> PaymentInitialize(BaseModel model)
         {
-            var order = await this.mediator.Send(new GetOrderQuery(orderId));
+            var order = await this.mediator.Send(new GetOrderQuery(model.Id));
             var response = new Response<String>();
             if (order.Data == null) 
             {
                 response.Message = order.Message;
                 return response;
             }
-            var unique = orderId;
+            var unique = model.Id;
             var TotalAmount = order.Data.TotalAmount;
-
-            //foreach (var pOrders in order.ProductOrders)
-            //{
-            //    pOrders.Amount = pOrders.PriceAtPurchase + pOrders.Quantity;
-            //    order.TotalAmount += pOrders.Amount;
-            //}
 
             var request = new HttpRequestMessage
             {
@@ -49,7 +43,7 @@ namespace DirectFarm.API.Controllers
                 Content = new StringContent(JsonSerializer.Serialize(new
                 {
                     amount = TotalAmount.ToString(),
-                    currency = "ETB",
+                    currency = "ETB", 
                     tx_ref = unique.ToString(),
                     //return_url = r_url,
                     //callback_url = "https://brave-clocks-jam.loca.lt/api/Order/verify",
@@ -78,14 +72,14 @@ namespace DirectFarm.API.Controllers
             }
         }
         [HttpPost("VerifyPayment")]
-        public async Task<Response<bool>> verifyAndOrder(Guid orderId)
+        public async Task<Response<bool>> verifyAndOrder(BaseModel model)
         {
             var response = new Response<bool>();
 
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
-                RequestUri = new Uri("https://api.chapa.co/v1/transaction/verify/" + orderId.ToString())
+                RequestUri = new Uri("https://api.chapa.co/v1/transaction/verify/" + model.Id.ToString())
             };
             request.Headers.Add("Authorization", "Bearer CHASECK_TEST-mrwVfokQVSm1FUUfx1xFwsvbRsHW6BsX");
 
@@ -96,11 +90,11 @@ namespace DirectFarm.API.Controllers
             if (!responseChapa.IsSuccessStatusCode)
             {
                 Console.WriteLine("Failed to initialize transaction with Chapa. Status Code: {StatusCode}, Response: {Response}");
-                await this.mediator.Send(new RecordPaymentCommand(orderId, false));
+                await this.mediator.Send(new RecordPaymentCommand(model.Id, false));
             }
             else 
             {
-                response = await this.mediator.Send(new RecordPaymentCommand(orderId, true));
+                response = await this.mediator.Send(new RecordPaymentCommand(model.Id, true));
             }
             return response;
         }

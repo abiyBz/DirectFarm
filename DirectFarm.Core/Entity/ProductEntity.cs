@@ -21,7 +21,7 @@ namespace DirectFarm.Core.Entity
         //public string? Image { get; set; }
         public string? NameAmharic { get; set; }
         public string? DescriptionAmharic { get; set; }
-        public int quantity {  get; set; }
+        //public int quantity {  get; set; }
         public ProductEntity() { }
         public ProductEntity(ProductModel model) 
         {
