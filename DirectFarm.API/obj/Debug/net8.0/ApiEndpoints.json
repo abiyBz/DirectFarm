@@ -104,6 +104,52 @@
     ]
   },
   {
+    "ContainingType": "DirectFarm.API.Controllers.FarmerController",
+    "Method": "GetAllFarmerFarmers",
+    "RelativePath": "api/Farmer/GetAllFarmers",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "Infrastracture.Base.Response\u00601[[System.Collections.Generic.List\u00601[[DirectFarm.Core.Entity.FarmerEntity, DirectFarm.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "DirectFarm.API.Controllers.FarmerController",
+    "Method": "SaveFarmer",
+    "RelativePath": "api/Farmer/SaveFarmer",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "entity",
+        "Type": "DirectFarm.Core.Entity.FarmerEntity",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "Infrastracture.Base.Response\u00601[[DirectFarm.Core.Entity.FarmerEntity, DirectFarm.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "DirectFarm.API.Controllers.OrderController",
     "Method": "PaymentInitialize",
     "RelativePath": "api/Order/IntializePayment",
@@ -342,6 +388,84 @@
     "ReturnTypes": [
       {
         "Type": "Infrastracture.Base.Response\u00601[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "DirectFarm.API.Controllers.WarehouseController",
+    "Method": "RegisterFarmersProduct",
+    "RelativePath": "api/Warehouse/RegisterFarmersProduct",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "entity",
+        "Type": "DirectFarm.Core.Entity.FarmerProductEntity",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "Infrastracture.Base.Response\u00601[[DirectFarm.Core.Entity.FarmerProductEntity, DirectFarm.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "DirectFarm.API.Controllers.WarehouseController",
+    "Method": "RegisterWarehouse",
+    "RelativePath": "api/Warehouse/RegisterWarehouse",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "entity",
+        "Type": "DirectFarm.Core.Entity.WarehouseEntity",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "Infrastracture.Base.Response\u00601[[DirectFarm.Core.Entity.WarehouseEntity, DirectFarm.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "DirectFarm.API.Controllers.WarehouseController",
+    "Method": "RegisterWarehouseManger",
+    "RelativePath": "api/Warehouse/RegisterWarehouseManager",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "entity",
+        "Type": "DirectFarm.Core.Entity.WarehouseManagerEntity",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "Infrastracture.Base.Response\u00601[[DirectFarm.Core.Entity.WarehouseManagerEntity, DirectFarm.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",

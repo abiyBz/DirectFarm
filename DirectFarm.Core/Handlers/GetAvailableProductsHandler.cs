@@ -12,28 +12,28 @@ using System.Threading.Tasks;
 
 namespace DirectFarm.Core.Handlers
 {
-    internal class GetAllProductsHandler : IRequestHandler<GetAllProductsQuery, Response<List<ProductEntity>>>
+    internal class GetAvailableProductsHandler : IRequestHandler<GetAvailableProductsQuery, Response<List<ProductEntity>>>
     {
         IManageDirectFarmRepository repository;
-        ILogger<GetAllProductsHandler> logger;
+        ILogger<GetAvailableProductsHandler> logger;
 
-        public GetAllProductsHandler(IManageDirectFarmRepository repository, ILogger<GetAllProductsHandler> logger)
+        public GetAvailableProductsHandler(IManageDirectFarmRepository repository, ILogger<GetAvailableProductsHandler> logger)
         {
             this.repository = repository;
             this.logger = logger;
         }
 
-        public async Task<Response<List<ProductEntity>>> Handle(GetAllProductsQuery request, CancellationToken cancellationToken)
+        public async Task<Response<List<ProductEntity>>> Handle(GetAvailableProductsQuery request, CancellationToken cancellationToken)
         {
             var response = new Response<List<ProductEntity>>();
-            try 
+            try
             {
-                var products = await this.repository.GetAllProducts();
+                var products = await this.repository.GetAvailableProducts();
                 response.Data = ProductEntity.toEntityList(products);
                 return response;
 
             }
-            catch(Exception ex) 
+            catch (Exception ex)
             {
                 logger.LogError(ex.Message);
                 response.Message = ex.Message;

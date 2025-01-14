@@ -9,7 +9,7 @@ namespace DirectFarm.Core.Entity
 {
     public class ProductOrderEntity
     {
-        //public Guid Id { get; set; } = Guid.NewGuid();
+        //public Guid Id { get; set; } = Guid.Empty;
         public ProductEntity Product { get; set; } = null!;
         //public OrderEntity? Order { get; set; }
         public decimal Quantity { get; set; }

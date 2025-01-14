@@ -17,13 +17,20 @@ namespace DirectFarm.Core.Contracts.Repositories
         public Task<bool> SaveProductPic(ProductImageEntity entity);
         public Task<byte[]> GetProductPicture(Guid id);
         public Task<OrderEntity> PlaceOrder(OrderEntity order);
-        public Task<bool> recordPayment(Guid Id, bool success);
+        public Task recordPayment(Guid Id, bool success);
         public Task<CustomerModel> SaveCustomer(CustomerEntity entity);
         public Task<CustomerModel> SaveRefreshToken(string email, string refreshtoken);
         public Task<CustomerModel> RegsiterCustomer(CustomerEntity entity, string Refreshtoken);
         public Task<string> GetRefreshToken(string email);
-        public void DeleteProduct(Guid productId);
+        public Task DeleteProduct(Guid productId);
         public Task<List<OrderModel>> GetCustomerOrders(Guid Id);
         public Task<ProductModel> GetProduct(Guid Id);
+        public Task<List<ProductModel>> GetAvailableProducts();
+        public Task<FarmerModel> SaveFarmer(FarmerEntity farmer);
+        public Task<List<FarmerModel>> GetAllFarmers();
+        public Task<WarehouseManagerModel> SaveManager(WarehouseManagerEntity entity);
+        public Task<WarehouseModel> SaveWarehouse(WarehouseEntity entity);
+        public Task<WarehouseModel> GetWarehouse(Guid Id);
+        public Task<FarmerProductModel> SaveFarmerProducts(FarmerProductEntity entity);
     }
 }

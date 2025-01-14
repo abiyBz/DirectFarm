@@ -10,7 +10,7 @@ namespace DirectFarm.Core.Models
 {
     public class ProductOrderModel
     {
-        public Guid id { get; set; } = Guid.NewGuid();
+        public Guid id { get; set; } = Guid.Empty;
         public Guid product_id { get; set; }
         //public virtual ProductModel? Product { get; set; } = null!;
         public Guid order_id { get; set; }

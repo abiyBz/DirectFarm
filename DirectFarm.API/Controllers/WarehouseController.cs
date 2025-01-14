@@ -1,4 +1,8 @@
-﻿using MediatR;
+﻿using DirectFarm.Core.Contracts.Command;
+using DirectFarm.Core.Contracts.Query;
+using DirectFarm.Core.Entity;
+using Infrastracture.Base;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Http;
 
@@ -16,6 +20,25 @@ namespace DirectFarm.API.Controllers
             this.mediator = mediator;
         }
 
-        
+        [HttpPost("RegisterFarmersProduct")]
+        public async Task<Response<FarmerProductEntity>> RegisterFarmersProduct(FarmerProductEntity entity)
+        {
+            var result = await this.mediator.Send(new SaveFarmerProductCommand(entity));
+            return result;
+        }
+
+        [HttpPost("RegisterWarehouse")]
+        public async Task<Response<WarehouseEntity>> RegisterWarehouse(WarehouseEntity entity)
+        {
+            var result = await this.mediator.Send(new SaveWarehouseCommand(entity));
+            return result;
+        }
+
+        [HttpPost("RegisterWarehouseManager")]
+        public async Task<Response<WarehouseManagerEntity>> RegisterWarehouseManger(WarehouseManagerEntity entity)
+        {
+            var result = await this.mediator.Send(new SaveManagerCommand(entity));
+            return result;
+        }
     }
 }

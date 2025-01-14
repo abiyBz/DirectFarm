@@ -1,4 +1,4 @@
-﻿using DirectFarm.Core.Contracts.Query;
+﻿using DirectFarm.Core.Contracts.Command;
 using DirectFarm.Core.Contracts.Repositories;
 using DirectFarm.Core.Entity;
 using Infrastracture.Base;
@@ -12,34 +12,31 @@ using System.Threading.Tasks;
 
 namespace DirectFarm.Core.Handlers
 {
-    internal class GetAllProductsHandler : IRequestHandler<GetAllProductsQuery, Response<List<ProductEntity>>>
+    internal class SaveFarmerProductsHandler : IRequestHandler<SaveFarmerProductCommand, Response<FarmerProductEntity>>
     {
         IManageDirectFarmRepository repository;
-        ILogger<GetAllProductsHandler> logger;
+        ILogger<SaveFarmerProductsHandler> logger;
 
-        public GetAllProductsHandler(IManageDirectFarmRepository repository, ILogger<GetAllProductsHandler> logger)
+        public SaveFarmerProductsHandler(IManageDirectFarmRepository repository, ILogger<SaveFarmerProductsHandler> logger)
         {
             this.repository = repository;
             this.logger = logger;
         }
 
-        public async Task<Response<List<ProductEntity>>> Handle(GetAllProductsQuery request, CancellationToken cancellationToken)
+        public async Task<Response<FarmerProductEntity>> Handle(SaveFarmerProductCommand request, CancellationToken cancellationToken)
         {
-            var response = new Response<List<ProductEntity>>();
-            try 
+            var response = new Response<FarmerProductEntity>();
+            try
             {
-                var products = await this.repository.GetAllProducts();
-                response.Data = ProductEntity.toEntityList(products);
+                response.Data = new FarmerProductEntity(await repository.SaveFarmerProducts(request.Entity));
                 return response;
-
             }
-            catch(Exception ex) 
+            catch (Exception ex)
             {
                 logger.LogError(ex.Message);
                 response.Message = ex.Message;
                 response.Ex = ex;
                 response.ResponseStatus = ResponseStatus.Error;
-                response.Data = new List<ProductEntity>();
                 return response;
             }
         }

@@ -42,7 +42,7 @@ namespace DirectFarm.Core.Entity
         {
             Id = id;
         }
-        public static List<ProductEntity> ModeltoEntityList(List<ProductModel> models)
+        public static List<ProductEntity> toEntityList(List<ProductModel> models)
         {
             if (models == null || !models.Any())
                 return new List<ProductEntity>();

@@ -8,7 +8,7 @@ namespace DirectFarm.Core.Entity
 {
     public class ReviewEntity
     {
-        public Guid Id { get; set; } = Guid.NewGuid();
+        public Guid Id { get; set; } = Guid.Empty;
         //public Guid ProductId { get; set; }
         public ProductEntity Product { get; set; } = null!;
         //public Guid CustomerId { get; set; }

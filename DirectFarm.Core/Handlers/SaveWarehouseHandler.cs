@@ -1,4 +1,4 @@
-﻿using DirectFarm.Core.Contracts.Query;
+﻿using DirectFarm.Core.Contracts.Command;
 using DirectFarm.Core.Contracts.Repositories;
 using DirectFarm.Core.Entity;
 using Infrastracture.Base;
@@ -12,34 +12,31 @@ using System.Threading.Tasks;
 
 namespace DirectFarm.Core.Handlers
 {
-    internal class GetAllProductsHandler : IRequestHandler<GetAllProductsQuery, Response<List<ProductEntity>>>
+    internal class SaveWarehouseHandler : IRequestHandler<SaveWarehouseCommand, Response<WarehouseEntity>>
     {
         IManageDirectFarmRepository repository;
-        ILogger<GetAllProductsHandler> logger;
+        ILogger<SaveWarehouseHandler> logger;
 
-        public GetAllProductsHandler(IManageDirectFarmRepository repository, ILogger<GetAllProductsHandler> logger)
+        public SaveWarehouseHandler(IManageDirectFarmRepository repository, ILogger<SaveWarehouseHandler> logger)
         {
             this.repository = repository;
             this.logger = logger;
         }
 
-        public async Task<Response<List<ProductEntity>>> Handle(GetAllProductsQuery request, CancellationToken cancellationToken)
+        public async Task<Response<WarehouseEntity>> Handle(SaveWarehouseCommand request, CancellationToken cancellationToken)
         {
-            var response = new Response<List<ProductEntity>>();
-            try 
+            var response = new Response<WarehouseEntity>();
+            try
             {
-                var products = await this.repository.GetAllProducts();
-                response.Data = ProductEntity.toEntityList(products);
+                response.Data = new WarehouseEntity(await repository.SaveWarehouse(request.Entity));
                 return response;
-
             }
-            catch(Exception ex) 
+            catch (Exception ex)
             {
                 logger.LogError(ex.Message);
                 response.Message = ex.Message;
                 response.Ex = ex;
                 response.ResponseStatus = ResponseStatus.Error;
-                response.Data = new List<ProductEntity>();
                 return response;
             }
         }

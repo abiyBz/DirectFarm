@@ -28,8 +28,9 @@ namespace DirectFarm.Core.Handlers
             var response = new Response<bool>();
             try 
             {
-                response.Message = "Payment Completed";
-                response.Data = await repository.recordPayment(request.param, request.success);
+                response.Message = request.success?"Payment Completed":"Payment Failed";
+                await repository.recordPayment(request.param, request.success);
+                response.Data = request.success;
                 return response;
             }
             catch (Exception ex)

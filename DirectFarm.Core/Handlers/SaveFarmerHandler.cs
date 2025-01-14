@@ -1,4 +1,4 @@
-﻿using DirectFarm.Core.Contracts.Query;
+﻿using DirectFarm.Core.Contracts.Command;
 using DirectFarm.Core.Contracts.Repositories;
 using DirectFarm.Core.Entity;
 using Infrastracture.Base;
@@ -12,34 +12,33 @@ using System.Threading.Tasks;
 
 namespace DirectFarm.Core.Handlers
 {
-    internal class GetAllProductsHandler : IRequestHandler<GetAllProductsQuery, Response<List<ProductEntity>>>
+    internal class SaveFarmerHandler : IRequestHandler<SaveFarmerCommand, Response<FarmerEntity>>
     {
         IManageDirectFarmRepository repository;
-        ILogger<GetAllProductsHandler> logger;
+        ILogger<SaveFarmerHandler> logger;
 
-        public GetAllProductsHandler(IManageDirectFarmRepository repository, ILogger<GetAllProductsHandler> logger)
+        public SaveFarmerHandler(IManageDirectFarmRepository repository, ILogger<SaveFarmerHandler> logger)
         {
             this.repository = repository;
             this.logger = logger;
         }
 
-        public async Task<Response<List<ProductEntity>>> Handle(GetAllProductsQuery request, CancellationToken cancellationToken)
+        public async Task<Response<FarmerEntity>> Handle(SaveFarmerCommand request, CancellationToken cancellationToken)
         {
-            var response = new Response<List<ProductEntity>>();
-            try 
+            var response = new Response<FarmerEntity>();
+            try
             {
-                var products = await this.repository.GetAllProducts();
-                response.Data = ProductEntity.toEntityList(products);
+                response.Data = new FarmerEntity(await this.repository.SaveFarmer(request.entity));
                 return response;
 
             }
-            catch(Exception ex) 
+            catch (Exception ex)
             {
                 logger.LogError(ex.Message);
                 response.Message = ex.Message;
                 response.Ex = ex;
                 response.ResponseStatus = ResponseStatus.Error;
-                response.Data = new List<ProductEntity>();
+                response.Data = new FarmerEntity();
                 return response;
             }
         }

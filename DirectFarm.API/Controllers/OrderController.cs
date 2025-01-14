@@ -89,8 +89,8 @@ namespace DirectFarm.API.Controllers
 
             if (!responseChapa.IsSuccessStatusCode)
             {
-                Console.WriteLine("Failed to initialize transaction with Chapa. Status Code: {StatusCode}, Response: {Response}");
-                await this.mediator.Send(new RecordPaymentCommand(model.Id, false));
+                Console.WriteLine($"Failed to initialize transaction with Chapa. Status Code: {responseChapa.StatusCode}, Response: {responseChapa}");
+                response = await this.mediator.Send(new RecordPaymentCommand(model.Id, false));
             }
             else 
             {

@@ -8,7 +8,7 @@ namespace DirectFarm.Core.Models
 {
     public class ReviewModel
     {
-        public Guid review_id { get; set; } = Guid.NewGuid();
+        public Guid review_id { get; set; } = Guid.Empty;
         public Guid product_id { get; set; }
         public ProductModel Product { get; set; } = null!;
         public Guid customer_id { get; set; }

@@ -12,34 +12,34 @@ using System.Threading.Tasks;
 
 namespace DirectFarm.Core.Handlers
 {
-    internal class GetAllProductsHandler : IRequestHandler<GetAllProductsQuery, Response<List<ProductEntity>>>
+    internal class GetAllFarmersHandler : IRequestHandler<GetAllFarmersQuery, Response<List<FarmerEntity>>>
     {
         IManageDirectFarmRepository repository;
-        ILogger<GetAllProductsHandler> logger;
+        ILogger<GetAllFarmersHandler> logger;
 
-        public GetAllProductsHandler(IManageDirectFarmRepository repository, ILogger<GetAllProductsHandler> logger)
+        public GetAllFarmersHandler(IManageDirectFarmRepository repository, ILogger<GetAllFarmersHandler> logger)
         {
             this.repository = repository;
             this.logger = logger;
         }
 
-        public async Task<Response<List<ProductEntity>>> Handle(GetAllProductsQuery request, CancellationToken cancellationToken)
+        public async Task<Response<List<FarmerEntity>>> Handle(GetAllFarmersQuery request, CancellationToken cancellationToken)
         {
-            var response = new Response<List<ProductEntity>>();
-            try 
+            var response = new Response<List<FarmerEntity>>();
+            try
             {
-                var products = await this.repository.GetAllProducts();
-                response.Data = ProductEntity.toEntityList(products);
+                var farmers = await this.repository.GetAllFarmers();
+                response.Data = FarmerEntity.toEntityList(farmers);
                 return response;
 
             }
-            catch(Exception ex) 
+            catch (Exception ex)
             {
                 logger.LogError(ex.Message);
                 response.Message = ex.Message;
                 response.Ex = ex;
                 response.ResponseStatus = ResponseStatus.Error;
-                response.Data = new List<ProductEntity>();
+                response.Data = new List<FarmerEntity>();
                 return response;
             }
         }

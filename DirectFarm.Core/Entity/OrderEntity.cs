@@ -10,7 +10,7 @@ namespace DirectFarm.Core.Entity
 {
     public class OrderEntity
     {
-        public Guid Id { get; set; } = Guid.NewGuid();
+        public Guid Id { get; set; } = Guid.Empty;
         public CustomerEntity customer { get; set; } = null!;
         public decimal TotalAmount { get; set; }
         public string Status { get; set; } = "pending";

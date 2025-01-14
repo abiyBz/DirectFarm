@@ -13,7 +13,7 @@ namespace DirectFarm.Core.Models
 {
     public class CustomerModel
     {
-        public Guid customer_id { get; set; } = Guid.NewGuid();
+        public Guid customer_id { get; set; } = Guid.Empty;
         public string name { get; set; } = string.Empty;
         public string email { get; set; } = string.Empty;
         public string phone { get; set; } = string.Empty;

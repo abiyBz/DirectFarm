@@ -62,7 +62,7 @@ namespace DirectFarm.API.Controllers
         [HttpPost("GetAvailableProducts")]
         public async Task<Response<List<ProductEntity>>> GetAvailableProducts()
         {
-            var result = await this.mediator.Send(new GetAllProductsQuery());
+            var result = await this.mediator.Send(new GetAvailableProductsQuery());
             return result;
         }
     }

@@ -40,6 +40,7 @@ namespace DirectFarm.Infrastracture.Repository
                 {
                     model.product_id = product.Id;
                     model.image = updateModel.image;
+                    model.amount = updateModel.amount;
                     await UpdateAsync<ProductModel>(model);
                     await UnitOfWork.SaveChanges();
                 }
@@ -57,6 +58,12 @@ namespace DirectFarm.Infrastracture.Repository
         public async Task<List<ProductModel>> GetAllProducts()
         {
             var response = await GetAllAsync<ProductModel>();
+            return response.ToList();
+        }
+
+        public async Task<List<ProductModel>> GetAvailableProducts()
+        {
+            var response = await FindAsync<ProductModel>(x => x.status == "available" && x.amount > 0);
             return response.ToList();
         }
 
@@ -171,16 +178,33 @@ namespace DirectFarm.Infrastracture.Repository
             return order;
         }
 
-        public async Task<bool> recordPayment(Guid Id, bool success)
+        public async Task recordPayment(Guid Id, bool success)
         {
             var order = await FindOneAsync<OrderModel>(x => x.order_id == Id);
             if (order == null) throw new Exception("No such order made");
-            if (success) order.Success();
-            else order.failure();
+
+            if (success)
+            {
+                order.Success();
+                var productOrders = await FindAsync<ProductOrderModel>(x => x.order_id == order.order_id); // .ToListAsync() to ensure we're not holding onto the iterator
+
+                foreach (var po in productOrders.ToList())
+                {
+                    var product = await FindOneAsync<ProductModel>(x => x.product_id == po.product_id);
+                    if (product == null) continue;
+                    product.amount -= po.quantity;
+                    product.created_at = SetKindUtc(product.created_at);
+                    await UpdateAsync<ProductModel>(product);
+                }
+            }
+            else
+            {
+                order.failure();
+            }
+
             order.orderdate = SetKindUtc(order.orderdate);
             await UpdateAsync<OrderModel>(order);
             await UnitOfWork.SaveChanges();
-            return true;
         }
 
         public async Task<CustomerModel> SaveCustomer(CustomerEntity entity)
@@ -235,9 +259,12 @@ namespace DirectFarm.Infrastracture.Repository
             var repsonse = await FindOneAsync<CustomerModel>(x => x.email == email);
             return repsonse.refresh_token;
         }
-        public async void DeleteProduct(Guid productId)
+        public async Task DeleteProduct(Guid productId)
         {
-            await DeleteAsync<ProductModel>(x => x.product_id == productId);
+            var product = await FindOneAsync<ProductModel>(x => x.product_id == productId);
+            if (product == null) throw new Exception("Product not found!");
+            await DeleteAsync<ProductModel>(product);
+            await UnitOfWork.SaveChanges();
         }
 
         public async Task<List<OrderModel>> GetCustomerOrders (Guid Id)
@@ -249,6 +276,117 @@ namespace DirectFarm.Infrastracture.Repository
         public async Task<ProductModel> GetProduct(Guid Id) 
         {
             return await FindOneAsync<ProductModel>(x=> x.product_id == Id);
+        }
+
+        public async Task<FarmerModel> SaveFarmer(FarmerEntity farmer) 
+        {
+            var model = new FarmerModel(farmer);
+            if (farmer.Id <= Guid.Empty)
+            {
+                model.registration_date = DateTime.UtcNow;
+                await AddAsync<FarmerModel>(model);
+                await UnitOfWork.SaveChanges();
+            }
+            else
+            {
+                var updateModel = await FindOneAsync<FarmerModel>(x => x.farmer_id== farmer.Id);
+                if (updateModel != null)
+                {
+                    model.profile_picture= updateModel.profile_picture;
+                    model.registration_date = SetKindUtc(model.registration_date);
+                    await UpdateAsync<FarmerModel>(model);
+                    await UnitOfWork.SaveChanges();
+                }
+                else
+                {
+                    throw new Exception("Farmer doesn't exist!");
+                }
+            }
+            return model;
+        }
+        public async Task<List<FarmerModel>> GetAllFarmers() 
+        {
+            var farmers = await GetAllAsync<FarmerModel>();
+            return farmers.ToList();
+        }
+        public async Task<WarehouseManagerModel> SaveManager(WarehouseManagerEntity entity) 
+        {
+            var model = new WarehouseManagerModel(entity);
+            if (entity.Id <= Guid.Empty)
+            {
+                await AddAsync<WarehouseManagerModel>(model);
+                await UnitOfWork.SaveChanges();
+            }
+            else 
+            {
+                var updateModel = await FindOneAsync<WarehouseManagerModel>(x => x.manager_id== model.manager_id);
+                if (updateModel != null)
+                {
+                    await UpdateAsync<WarehouseManagerModel>(model);
+                    await UnitOfWork.SaveChanges();
+                }
+                else
+                {
+                    throw new Exception("Warehouse manager doesn't exist!");
+                }
+            }
+            return model;
+        }
+        public async Task<WarehouseModel> SaveWarehouse(WarehouseEntity entity) 
+        {
+            var model = new WarehouseModel(entity);
+            if (entity.Id <= Guid.Empty)
+            {
+                await AddAsync<WarehouseModel>(model);
+                await UnitOfWork.SaveChanges();
+            }
+            else
+            {
+                var updateModel = await FindOneAsync<WarehouseModel>(x => x.warehouse_id == model.warehouse_id);
+                if (updateModel != null)
+                {
+                    await UpdateAsync<WarehouseModel>(model);
+                    await UnitOfWork.SaveChanges();
+                }
+                else
+                {
+                    throw new Exception("Warehouse doesn't exist!");
+                }
+            }
+            return model;
+        }
+        public async Task<WarehouseModel> GetWarehouse(Guid Id)
+        {
+            return await FindOneAsync<WarehouseModel>(x => x.warehouse_id == Id);
+        }
+        public async Task<FarmerProductModel> SaveFarmerProducts(FarmerProductEntity entity)
+        {
+            var model = new FarmerProductModel(entity);
+            if (entity.Id <= Guid.Empty)
+            {
+                var product = await FindOneAsync<ProductModel>(x => x.product_id == model.product_id);
+                product.created_at = SetKindUtc(product.created_at);
+                product.amount += model.quantity_available;
+                await UpdateAsync<ProductModel>(product);
+                await AddAsync<FarmerProductModel>(model);
+                await UnitOfWork.SaveChanges();
+                
+            }
+            else
+            {
+                var updateModel = await FindOneAsync<FarmerProductModel>(x => x.id == model.id);
+                if (updateModel != null)
+                {
+                    model.added_at = SetKindUtc(updateModel.added_at);
+                    await UpdateAsync<FarmerProductModel>(model);
+                    await UnitOfWork.SaveChanges();
+                }
+                else
+                {
+                    throw new Exception("Farmer product doesn't exist!");
+                }
+            }
+            return model;
         }
     }
     }

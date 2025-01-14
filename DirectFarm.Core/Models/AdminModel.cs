@@ -8,7 +8,7 @@ namespace DirectFarm.Core.Models
 {
     public class AdminModel
     {
-        public Guid admin_id { get; set; } = Guid.NewGuid();
+        public Guid admin_id { get; set; } = Guid.Empty;
         public string name { get; set; } = string.Empty;
         public string email { get; set; } = string.Empty;
         public string password_hash { get; set; } = string.Empty;

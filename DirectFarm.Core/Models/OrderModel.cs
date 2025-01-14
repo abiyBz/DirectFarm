@@ -9,7 +9,7 @@ namespace DirectFarm.Core.Models
 {
     public class OrderModel
     {
-        public Guid order_id { get; set; } //= Guid.NewGuid();
+        public Guid order_id { get; set; } //= Guid.Empty;
         public Guid customer_id { get; set; }
         //public virtual CustomerModel? customer { get; set; } = null!;
         public decimal total_amount { get; set; }
