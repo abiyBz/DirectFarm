@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DirectFarm.Core.Entity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,11 +11,19 @@ namespace DirectFarm.Core.Models
     {
         public Guid review_id { get; set; } = Guid.Empty;
         public Guid product_id { get; set; }
-        public ProductModel Product { get; set; } = null!;
         public Guid customer_id { get; set; }
-        public CustomerModel Customer { get; set; } = null!;
         public int rating { get; set; }
         public string? comment { get; set; }
         public DateTime created_at { get; set; } = DateTime.UtcNow;
+        public ReviewModel() { }
+        public ReviewModel(ReviewEntity entity) 
+        {
+            review_id = entity.Id;
+            product_id = entity.Product.Id;
+            customer_id = entity.Customer.Id;
+            rating = entity.Rating;
+            comment = entity.Comment;
+            created_at = entity.CreatedAt;
+        }
     }
 }

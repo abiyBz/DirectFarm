@@ -32,5 +32,9 @@ namespace DirectFarm.Core.Contracts.Repositories
         public Task<WarehouseModel> SaveWarehouse(WarehouseEntity entity);
         public Task<WarehouseModel> GetWarehouse(Guid Id);
         public Task<FarmerProductModel> SaveFarmerProducts(FarmerProductEntity entity);
+        public Task<List<ProductModel>> GetOrderProducts(Guid orderId);
+        public Task<ReviewModel> SaveReview(ReviewEntity entity);
+        public Task<List<ProductModel>> GetFarmerProducts(Guid farmerId);
+        public Task<List<ReviewModel>> GetProductReviews(Guid productId);
     }
 }

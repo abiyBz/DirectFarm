@@ -1,4 +1,5 @@
-﻿using DirectFarm.Core.Contracts.Command;
+﻿using DirectFarm.API.GetModel;
+using DirectFarm.Core.Contracts.Command;
 using DirectFarm.Core.Contracts.Query;
 using DirectFarm.Core.Entity;
 using Infrastracture.Base;
@@ -38,6 +39,12 @@ namespace DirectFarm.API.Controllers
         public async Task<Response<WarehouseManagerEntity>> RegisterWarehouseManger(WarehouseManagerEntity entity)
         {
             var result = await this.mediator.Send(new SaveManagerCommand(entity));
+            return result;
+        }
+        [HttpPost("GetFarmersProduct")]
+        public async Task<Response<List<ProductEntity>>> GetFarmersProduct(BaseModel model)
+        {
+            var result = await this.mediator.Send(new GetFarmerProductsQuery(model.Id));
             return result;
         }
     }

@@ -300,5 +300,11 @@ namespace DirectFarm.API.Controllers
             var response = await this.mediator.Send(new GetCustomerOrdersQuery(model.Id));
             return response;
         }
+        [HttpPost("ReviewProduct")]
+        public async Task<Response<ReviewEntity>> ReviewProduct(ReviewEntity entity)
+        {
+            var response = await this.mediator.Send(new SubmitReviewCommand(entity));
+            return response;
+        }
     }
 }

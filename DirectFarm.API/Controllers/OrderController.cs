@@ -104,5 +104,11 @@ namespace DirectFarm.API.Controllers
         {
             return await this.mediator.Send(new PlaceOrderCommand(order.toOrderEntity()));
         }
+
+        [HttpPost("GetOrderProducts")]
+        public async Task<Response<List<ProductEntity>>> GetOrderProducts(BaseModel model)
+        {
+            return await mediator.Send(new GetOrderProductsQuery(model.Id));
+        }
     }
 }
