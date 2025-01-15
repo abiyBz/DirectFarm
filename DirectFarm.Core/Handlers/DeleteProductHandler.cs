@@ -28,7 +28,7 @@ namespace DirectFarm.Core.Handlers
             var response = new Response<bool>();
             try
             {
-                this.repository.DeleteProduct(request.id);
+                await this.repository.DeleteProduct(request.id);
                 response.Data = true;
                 response.Message = "Product deleted successfuly!";
                 return response;
