@@ -18,7 +18,7 @@ namespace DirectFarm.Core.Models
         public ReviewModel() { }
         public ReviewModel(ReviewEntity entity) 
         {
-            review_id = entity.Id;
+            review_id = Guid.Empty;
             product_id = entity.Product.Id;
             customer_id = entity.Customer.Id;
             rating = entity.Rating;

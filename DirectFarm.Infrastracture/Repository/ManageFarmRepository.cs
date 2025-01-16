@@ -147,6 +147,7 @@ namespace DirectFarm.Infrastracture.Repository
                 item.PriceAtPurchase = product.price_per_unit;
                 item.Product = new ProductEntity(product);
                 item.Amount = item.PriceAtPurchase * item.Quantity;
+                if (product.amount < item.Quantity) throw new Exception($"There isn't enough {product.name} there is only {product.amount} {product.unit} left. Adjust your order accordingly and order again.; በቂ {product.name_amharic} አልተገኘም። ለአሁኑ የቀረው {product.amount} {product.unit} ብቻ ነው። ትዛዙን ያስተካክሉ እና እንደገና ያዘዙ።");
                 order.TotalAmount += item.Amount;
                 num++;
             }
@@ -378,7 +379,7 @@ namespace DirectFarm.Infrastracture.Repository
                     await DeleteAsync<FarmerProductModel>(updateModel);
                 }
             }
-            model.product_id = Guid.Empty;
+            model.id = Guid.Empty;
             var product = await FindOneAsync<ProductModel>(x => x.product_id == model.product_id);
             product.created_at = SetKindUtc(product.created_at);
             product.amount += model.quantity_available;
@@ -413,13 +414,10 @@ namespace DirectFarm.Infrastracture.Repository
         public async Task<ReviewModel> SaveReview(ReviewEntity entity)
         {
             var model = new ReviewModel(entity);
-            if (entity.Id > Guid.Empty)
+            var review = await FindOneAsync<ReviewModel>(x => x.product_id == model.product_id && x.customer_id == model.product_id );
+            if (review != null)
             {
-                var review = await FindOneAsync<ReviewModel>(x => x.review_id == entity.Id);
-                if (review != null)
-                {
-                    await DeleteAsync<ReviewModel>(review);
-                }
+                await DeleteAsync<ReviewModel>(review);
             }
             model.review_id = Guid.Empty;
             var orders = await FindAsync<OrderModel>(x => x.customer_id == entity.Customer.Id);
@@ -440,6 +438,11 @@ namespace DirectFarm.Infrastracture.Repository
         {
             var reviews = await FindAsync<ReviewModel>(x => x.product_id == productId);
             return reviews.ToList();
+        }
+        public async Task<List<WarehouseModel>> GetAllWarehouses() 
+        {
+            var warehouses = await GetAllAsync<WarehouseModel>();
+            return warehouses.ToList();
         }
     }
     }

@@ -145,13 +145,13 @@ namespace DirectFarm.API.Controllers
                 enabled = true,
                 credentials = new[]
                 {
-            new
-            {
-                type = "password",
-                value = register.Password,
-                temporary = false
-            }
-        }
+                    new
+                    {
+                        type = "password",
+                        value = register.Password,
+                        temporary = false
+                    }
+                }
             };
 
             var jsonPayload = JsonSerializer.Serialize(userPayload);
@@ -163,50 +163,50 @@ namespace DirectFarm.API.Controllers
 
                 // Register the user
                 var registerResponse = await httpClient.PostAsync(registrationEndpoint, content);
-                if (!registerResponse.IsSuccessStatusCode)
-                {
+                //if (!registerResponse.IsSuccessStatusCode)
+                //{
                     return registerResponse;
-                }
+                //}
 
-                // Get the created user's ID
-                var getUserEndpoint = $"{registrationEndpoint}?username={register.Email}";
-                var getUserResponse = await httpClient.GetAsync(getUserEndpoint);
-                if (!getUserResponse.IsSuccessStatusCode)
-                {
-                    throw new Exception($"Failed to retrieve the user ID : {getUserResponse}");
-                }
-                var userData = await getUserResponse.Content.ReadAsStringAsync();
-                var users = JsonDocument.Parse(userData).RootElement.EnumerateArray();
-                var userId = users.First().GetProperty("id").GetString();
+                //// Get the created user's ID
+                //var getUserEndpoint = $"{registrationEndpoint}?username={register.Email}";
+                //var getUserResponse = await httpClient.GetAsync(getUserEndpoint);
+                //if (!getUserResponse.IsSuccessStatusCode)
+                //{
+                //    throw new Exception($"Failed to retrieve the user ID : {getUserResponse}");
+                //}
+                //var userData = await getUserResponse.Content.ReadAsStringAsync();
+                //var users = JsonDocument.Parse(userData).RootElement.EnumerateArray();
+                //var userId = users.First().GetProperty("id").GetString();
 
-                // Get the client UUID
-                var clientUuidEndpoint = $"{_configuration["Keycloak:BaseUrl"]}/admin/realms/directFarm/clients?clientId=realm-management";
-                var clientResponse = await httpClient.GetAsync(clientUuidEndpoint);
-                if (!clientResponse.IsSuccessStatusCode)
-                {
-                    throw new Exception($"Failed to retrieve client UUID: /n {clientResponse}");
-                }
-                var clientData = await clientResponse.Content.ReadAsStringAsync();
-                var clientUuid = JsonDocument.Parse(clientData).RootElement[0].GetProperty("id").GetString();
+                //// Get the client UUID
+                //var clientUuidEndpoint = $"{_configuration["Keycloak:BaseUrl"]}/admin/realms/directFarm/clients?clientId=realm-management";
+                //var clientResponse = await httpClient.GetAsync(clientUuidEndpoint);
+                //if (!clientResponse.IsSuccessStatusCode)
+                //{
+                //    throw new Exception($"Failed to retrieve client UUID: /n {clientResponse}");
+                //}
+                //var clientData = await clientResponse.Content.ReadAsStringAsync();
+                //var clientUuid = JsonDocument.Parse(clientData).RootElement[0].GetProperty("id").GetString();
 
-                // Assign the role
-                var roleMappingEndpoint = $"http://localhost:8080/auth/admin/realms/directFarm/users/{userId}/role-mappings/clients/{clientUuid}";
-                var rolePayload = new[]
-                {
-                    new
-                    {
-                        id = "6816afa1-568b-410e-8460-106abb812d69", // Replace with your role ID
-                        name = "client" // Replace with your role name
-                    }
-                };
-                var roleJsonPayload = JsonSerializer.Serialize(rolePayload);
-                var roleContent = new StringContent(roleJsonPayload, Encoding.UTF8, "application/json");
-                var response = await httpClient.PostAsync(roleMappingEndpoint, roleContent);
-                //if (!response.IsSuccessStatusCode) 
+                //// Assign the role
+                //var roleMappingEndpoint = $"http://localhost:8080/auth/admin/realms/directFarm/users/{userId}/role-mappings/clients/{clientUuid}";
+                //var rolePayload = new[]
+                //{
+                //    new
+                //    {
+                //        id = "6816afa1-568b-410e-8460-106abb812d69", // Replace with your role ID
+                //        name = "client" // Replace with your role name
+                //    }
+                //};
+                //var roleJsonPayload = JsonSerializer.Serialize(rolePayload);
+                //var roleContent = new StringContent(roleJsonPayload, Encoding.UTF8, "application/json");
+                //var response = await httpClient.PostAsync(roleMappingEndpoint, roleContent);
+                ////if (!response.IsSuccessStatusCode) 
                 //{
                 //    throw new Exception($"Issue while registering role : {response}");
                 //}
-                return registerResponse;
+                //return registerResponse;
             }
         }
 

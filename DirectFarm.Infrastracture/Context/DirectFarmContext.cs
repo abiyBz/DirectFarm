@@ -18,7 +18,6 @@ namespace DirectFarm.Infrastracture.Context
         public DbSet<FarmerProductModel> FarmerProducts { get; set; } = null!;
         public DbSet<CustomerModel> Customers { get; set; } = null!;
         public DbSet<ProductOrderModel> ProductOrders { get; set; } = null!;
-        public DbSet<AdminModel> Admins { get; set; } = null!;
         public DbSet<OrderModel> Orders { get; set; } = null!;
         public DbSet<ReviewModel> Reviews { get; set; } = null!;
         public DirectFarmContext(DbContextOptions<DirectFarmContext> options): base(options) { }
@@ -38,7 +37,6 @@ namespace DirectFarm.Infrastracture.Context
             builder.Entity<FarmerProductModel>().HasKey(x => x.id);
             builder.Entity<CustomerModel>().HasKey(x => x.customer_id);
             builder.Entity<ProductOrderModel>().HasKey(x => x.id);
-            builder.Entity<AdminModel>().HasKey(x => x.admin_id);
             builder.Entity<OrderModel>().HasKey(x => x.order_id);
             builder.Entity<ReviewModel>().HasKey(x => x.review_id);
             base.OnModelCreating(builder);
@@ -52,7 +50,6 @@ namespace DirectFarm.Infrastracture.Context
             builder.Entity<FarmerProductModel>().ToTable("farmer_product");
             builder.Entity<CustomerModel>().ToTable("customer");
             builder.Entity<ProductOrderModel>().ToTable("product_order");
-            builder.Entity<AdminModel>().ToTable("admin");
             builder.Entity<OrderModel>().ToTable("order");
             builder.Entity<ReviewModel>().ToTable("reviews");
         }

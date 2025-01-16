@@ -58,11 +58,16 @@ namespace DirectFarm.API.Controllers
             return result;
         }
 
-        //finish later
         [HttpPost("GetAvailableProducts")]
         public async Task<Response<List<ProductEntity>>> GetAvailableProducts()
         {
             var result = await this.mediator.Send(new GetAvailableProductsQuery());
+            return result;
+        }
+        [HttpPost("GetProductReview")]
+        public async Task<Response<List<ReviewEntity>>> GetProductReview(BaseModel model)
+        {
+            var result = await this.mediator.Send(new GetProductReviewQuery(model.Id));
             return result;
         }
     }

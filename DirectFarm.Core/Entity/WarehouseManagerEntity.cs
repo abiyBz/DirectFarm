@@ -28,5 +28,14 @@ namespace DirectFarm.Core.Entity
         {
             Id = id;
         }
+        public WarehouseManagerEntity(Guid id, string name, string email, string phone, string status)
+        {
+            Id = id;
+            Name = name;
+            Email = email;
+            Phone = phone;
+            Status = status;
+        }
+        
     }
 }

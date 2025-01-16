@@ -24,6 +24,7 @@ namespace DirectFarm.API.Controllers
         {
             var result = await this.mediator.Send(new SaveFarmerCommand(entity));
             return result;
+            
         }
         [HttpPost("GetAllFarmers")]
         public async Task<Response<List<FarmerEntity>>> GetAllFarmerFarmers()

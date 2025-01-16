@@ -9,7 +9,7 @@ namespace DirectFarm.Core.Entity
 {
     public class ReviewEntity
     {
-        public Guid Id { get; set; } = Guid.Empty;
+        //public Guid Id { get; set; } = Guid.Empty;
         //public Guid ProductId { get; set; }
         public ProductEntity Product { get; set; } = null!;
         //public Guid CustomerId { get; set; }
@@ -20,7 +20,7 @@ namespace DirectFarm.Core.Entity
         public ReviewEntity() { }
         public ReviewEntity(ReviewModel model)
         {
-            this.Id = model.review_id;
+            //this.Id = model.review_id;
             this.Product = new ProductEntity(model.product_id);
             this.Customer = new CustomerEntity(model.customer_id);
             this.Rating = model.rating;
@@ -35,7 +35,7 @@ namespace DirectFarm.Core.Entity
 
             return models.Select(model => new ReviewEntity
             {
-                Id = model.review_id,
+                //Id = model.review_id,
                 Product = new ProductEntity(model.product_id),
                 Customer = new CustomerEntity(model.customer_id),
                 Rating = model.rating,

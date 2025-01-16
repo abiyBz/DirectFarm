@@ -1,5 +1,6 @@
 ﻿using DirectFarm.Core.Contracts.Query;
 using DirectFarm.Core.Contracts.Repositories;
+using DirectFarm.Core.Entity;
 using Infrastracture.Base;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -11,23 +12,24 @@ using System.Threading.Tasks;
 
 namespace DirectFarm.Core.Handlers
 {
-    public class GetProductImageHandler : IRequestHandler<GetProductImageQuery, Response<string>>
+    internal class GetAllWarehousesHandler : IRequestHandler<GetAllWarehousesQuery, Response<List<WarehouseEntity>>>
     {
         IManageDirectFarmRepository repository;
-        ILogger<GetProductImageHandler> logger;
+        ILogger<GetAllWarehousesHandler> logger;
 
-        public GetProductImageHandler(IManageDirectFarmRepository repository, ILogger<GetProductImageHandler> logger)
+        public GetAllWarehousesHandler(IManageDirectFarmRepository repository, ILogger<GetAllWarehousesHandler> logger)
         {
             this.repository = repository;
             this.logger = logger;
         }
 
-        public async Task<Response<string>> Handle(GetProductImageQuery request, CancellationToken cancellationToken)
+        public async Task<Response<List<WarehouseEntity>>> Handle(GetAllWarehousesQuery request, CancellationToken cancellationToken)
         {
-            var response = new Response<string>();
+            var response = new Response<List<WarehouseEntity>>();
             try
             {
-                 response.Data = System.Text.Encoding.UTF8.GetString(await this.repository.GetProductPicture(request.Id));
+                var model = await repository.GetAllWarehouses();
+                response.Data = WarehouseEntity.toEntityList(model.ToList());
                 return response;
             }
             catch (Exception ex)

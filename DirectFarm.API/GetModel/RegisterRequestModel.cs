@@ -18,5 +18,6 @@ namespace DirectFarm.API.GetModel
             var customer = new CustomerEntity(Guid.Empty, Name, Email, Phone, Address);
             return customer;
         }
+        
     }
 }
