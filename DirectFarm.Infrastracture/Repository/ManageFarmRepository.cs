@@ -444,5 +444,10 @@ namespace DirectFarm.Infrastracture.Repository
             var warehouses = await GetAllAsync<WarehouseModel>();
             return warehouses.ToList();
         }
+        public async Task<List<WarehouseManagerModel>> GetAllWarehouseManagers()
+        {
+            var managers = await GetAllAsync<WarehouseManagerModel>();
+            return managers.ToList();
+        }
     }
     }

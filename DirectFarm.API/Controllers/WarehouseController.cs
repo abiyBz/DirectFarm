@@ -179,10 +179,16 @@ namespace DirectFarm.API.Controllers
             var result = await this.mediator.Send(new GetFarmerProductsQuery(model.Id));
             return result;
         }
-        [HttpPost("GetAllWarehouses")]
+        [HttpGet("GetAllWarehouses")]
         public async Task<Response<List<WarehouseEntity>>> GetAllWarehouses()
         {
             var result = await this.mediator.Send(new GetAllWarehousesQuery());
+            return result;
+        }
+        [HttpGet("GetAllManagers")]
+        public async Task<Response<List<WarehouseManagerEntity>>> GetAllManagers() 
+        {
+            var result = await this.mediator.Send(new GetAllManagersQuery());
             return result;
         }
     }

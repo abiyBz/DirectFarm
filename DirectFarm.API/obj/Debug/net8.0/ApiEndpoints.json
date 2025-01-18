@@ -477,6 +477,26 @@
   },
   {
     "ContainingType": "DirectFarm.API.Controllers.WarehouseController",
+    "Method": "GetAllManagers",
+    "RelativePath": "api/Warehouse/GetAllManagers",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "Infrastracture.Base.Response\u00601[[System.Collections.Generic.List\u00601[[DirectFarm.Core.Entity.WarehouseManagerEntity, DirectFarm.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "DirectFarm.API.Controllers.WarehouseController",
     "Method": "GetAllWarehouses",
     "RelativePath": "api/Warehouse/GetAllWarehouses",
     "HttpMethod": "POST",

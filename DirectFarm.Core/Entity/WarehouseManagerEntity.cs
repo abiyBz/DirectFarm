@@ -36,6 +36,20 @@ namespace DirectFarm.Core.Entity
             Phone = phone;
             Status = status;
         }
+        public static List<WarehouseManagerEntity> toEntityList(List<WarehouseManagerModel> model) 
+        {
+            if (model == null || !model.Any())
+                return new List<WarehouseManagerEntity>();
+
+            return model.Select(model => new WarehouseManagerEntity
+            {
+                Id = model.manager_id,
+                Name = model.name,
+                Email = model.email,
+                Phone = model.phone,
+                Status = model.status
+            }).ToList();
+        }
         
     }
 }
