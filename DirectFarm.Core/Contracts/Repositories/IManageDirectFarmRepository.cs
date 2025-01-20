@@ -41,5 +41,7 @@ namespace DirectFarm.Core.Contracts.Repositories
         public Task<List<OrderModel>> GetAllOrders();
         public Task<List<OrderModel>> GetCompltedOrders();
         public Task<List<CustomerModel>> GetAllCustomers();
+        public Task<List<ProductModel>> GetProductsBelowNum(decimal num);
+        public Task OrderPickedUp(Guid orderId);
     }
 }

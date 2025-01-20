@@ -120,5 +120,10 @@ namespace DirectFarm.API.Controllers
         {
             return await mediator.Send(new GetCompletedOrdersQuery());
         }
+        [HttpPost("OrderPickedUp")]
+        public async Task<Response<bool>> OrderPickedUp(BaseModel model)
+        {
+            return await mediator.Send(new OrderPickedUpCommand(model.Id));
+        }
     }
 }

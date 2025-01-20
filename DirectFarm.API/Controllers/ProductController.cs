@@ -70,5 +70,11 @@ namespace DirectFarm.API.Controllers
             var result = await this.mediator.Send(new GetProductReviewQuery(model.Id));
             return result;
         }
+        [HttpPost("GetProductsBelow")]
+        public async Task<Response<List<ProductEntity>>> GetProductsBelow(decimal quantity) 
+        {
+            var result =  await mediator.Send(new GetProductsBelowQuery(quantity));
+            return result;
+        }
     }
 }

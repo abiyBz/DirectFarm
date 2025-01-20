@@ -464,5 +464,34 @@ namespace DirectFarm.Infrastracture.Repository
             var customers = await GetAllAsync<CustomerModel>();
             return customers.ToList();
         }
+        public async Task<List<ProductModel>> GetProductsBelowNum(decimal num) 
+        {
+            var products = await FindAsync<ProductModel>(x => x.amount < num);
+            return products.ToList();
+        }
+        public async Task OrderPickedUp(Guid orderId)
+        {
+            var order = await FindOneAsync<OrderModel>(x => x.order_id == orderId);
+            if (order == null) throw new Exception("No such order made");
+            if (order.status == "failed") 
+            {
+                var productOrders = await FindAsync<ProductOrderModel>(x => x.order_id == order.order_id); // .ToListAsync() to ensure we're not holding onto the iterator
+
+                foreach (var po in productOrders.ToList())
+                {
+                    var product = await FindOneAsync<ProductModel>(x => x.product_id == po.product_id);
+                    if (product == null) continue;
+                    product.amount -= po.quantity;
+                    product.created_at = SetKindUtc(product.created_at);
+                    await UpdateAsync<ProductModel>(product);
+                }
+            }
+            order.status = "picked up";
+            order.orderdate = SetKindUtc(order.orderdate);
+            var paymentdate = order.paymentdate?? DateTime.UtcNow;
+            order.paymentdate = SetKindUtc(paymentdate);
+            await UpdateAsync<OrderModel>(order);
+            await UnitOfWork.SaveChanges();
+        }
     }
     }

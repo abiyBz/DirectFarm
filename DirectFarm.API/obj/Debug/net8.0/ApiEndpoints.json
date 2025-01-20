@@ -289,6 +289,32 @@
   },
   {
     "ContainingType": "DirectFarm.API.Controllers.OrderController",
+    "Method": "OrderPickedUp",
+    "RelativePath": "api/Order/OrderPickedUp",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "model",
+        "Type": "DirectFarm.API.GetModel.BaseModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "Infrastracture.Base.Response\u00601[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "DirectFarm.API.Controllers.OrderController",
     "Method": "PlaceOrder",
     "RelativePath": "api/Order/PlaceOrder",
     "HttpMethod": "POST",
@@ -474,6 +500,32 @@
     "ReturnTypes": [
       {
         "Type": "Infrastracture.Base.Response\u00601[[System.Collections.Generic.List\u00601[[DirectFarm.Core.Entity.ReviewEntity, DirectFarm.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "DirectFarm.API.Controllers.ProductController",
+    "Method": "GetProductsBelow",
+    "RelativePath": "api/Product/GetProductsBelow",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "quantity",
+        "Type": "System.Decimal",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "Infrastracture.Base.Response\u00601[[System.Collections.Generic.List\u00601[[DirectFarm.Core.Entity.ProductEntity, DirectFarm.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "MediaTypes": [
           "text/plain",
           "application/json",

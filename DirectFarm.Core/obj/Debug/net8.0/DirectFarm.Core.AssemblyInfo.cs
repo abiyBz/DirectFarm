@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DirectFarm.Core")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b3fc9d44787da6c1ec120caa2c6f400d9a02a84b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+50bab617ede6e8cd1a35f49d93f87fb265a2d9eb")]
 [assembly: System.Reflection.AssemblyProductAttribute("DirectFarm.Core")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DirectFarm.Core")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
