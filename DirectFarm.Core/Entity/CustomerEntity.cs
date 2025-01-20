@@ -45,6 +45,15 @@ namespace DirectFarm.Core.Entity
             Status = model.status;
             
         }
+        public static List<CustomerEntity> toEntityList(List<CustomerModel> models)
+        {
+            List<CustomerEntity> entities = new List<CustomerEntity>();
+            foreach (var model in models)
+            {
+                entities.Add(new CustomerEntity(model));
+            }
+            return entities;
+        }
         //public string? RefreshToken { get; set; }
     }
 }

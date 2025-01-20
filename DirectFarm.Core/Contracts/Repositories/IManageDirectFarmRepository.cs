@@ -38,5 +38,8 @@ namespace DirectFarm.Core.Contracts.Repositories
         public Task<List<ReviewModel>> GetProductReviews(Guid productId);
         public Task<List<WarehouseModel>> GetAllWarehouses();
         public Task<List<WarehouseManagerModel>> GetAllWarehouseManagers();
+        public Task<List<OrderModel>> GetAllOrders();
+        public Task<List<OrderModel>> GetCompltedOrders();
+        public Task<List<CustomerModel>> GetAllCustomers();
     }
 }

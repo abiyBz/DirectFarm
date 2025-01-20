@@ -449,5 +449,20 @@ namespace DirectFarm.Infrastracture.Repository
             var managers = await GetAllAsync<WarehouseManagerModel>();
             return managers.ToList();
         }
+        public async Task<List<OrderModel>> GetAllOrders()
+        {
+            var orders = await GetAllAsync<OrderModel>();
+            return orders.ToList();
+        }
+        public async Task<List<OrderModel>> GetCompltedOrders()
+        {
+            var orders = await FindAsync<OrderModel>(x => x.status == "success");
+            return orders.ToList();
+        }
+        public async Task<List<CustomerModel>> GetAllCustomers()
+        {
+            var customers = await GetAllAsync<CustomerModel>();
+            return customers.ToList();
+        }
     }
     }

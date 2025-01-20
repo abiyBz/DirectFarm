@@ -306,5 +306,11 @@ namespace DirectFarm.API.Controllers
             var response = await this.mediator.Send(new SubmitReviewCommand(entity));
             return response;
         }
+        [HttpGet("GetAllCustomers")]
+        public async Task<Response<List<CustomerEntity>>> GetAllCustomers()
+        {
+            var response = await this.mediator.Send(new GetAllCustomersQuery());
+            return response;
+        }
     }
 }

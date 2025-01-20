@@ -110,5 +110,15 @@ namespace DirectFarm.API.Controllers
         {
             return await mediator.Send(new GetOrderProductsQuery(model.Id));
         }
+        [HttpGet("GetAllOrders")]
+        public async Task<Response<List<OrderEntity>>> GetAllOrders()
+        {
+            return await mediator.Send(new GetAllOrdersQuery());
+        }
+        [HttpGet("GetCompletedOrdes")]
+        public async Task<Response<List<OrderEntity>>> GetCompletedOrders()
+        {
+            return await mediator.Send(new GetCompletedOrdersQuery());
+        }
     }
 }
