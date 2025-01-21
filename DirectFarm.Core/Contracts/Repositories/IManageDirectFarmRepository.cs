@@ -43,5 +43,11 @@ namespace DirectFarm.Core.Contracts.Repositories
         public Task<List<CustomerModel>> GetAllCustomers();
         public Task<List<ProductModel>> GetProductsBelowNum(decimal num);
         public Task OrderPickedUp(Guid orderId);
+        public Task<List<WarehouseModel>> GetManagersWarehouses(Guid id);
+        public Task<List<FarmerProductEntity>> GetAllFarmerProducts();
+        public Task<List<FarmerProductEntity>> GetWarehouseFarmerProducts(Guid id);
+        public Task<List<FarmerProductEntity>> GetFarmersProductFarmer(Guid id);
+        public Task<WarehouseManagerModel> SaveManagerRefreshToken(string email, string refreshtoken);
+
     }
 }

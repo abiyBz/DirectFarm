@@ -26,48 +26,58 @@ namespace DirectFarm.API.Controllers
         [HttpPost("IntializePayment")]//, Authorize]
         public async Task<Response<String>> PaymentInitialize(BaseModel model)
         {
-            var order = await this.mediator.Send(new GetOrderQuery(model.Id));
             var response = new Response<String>();
-            if (order.Data == null) 
-            {
-                response.Message = order.Message;
-                return response;
-            }
-            var unique = model.Id;
-            var TotalAmount = order.Data.TotalAmount;
 
-            var request = new HttpRequestMessage
+            try
             {
-                Method = HttpMethod.Post,
-                RequestUri = new Uri("https://api.chapa.co/v1/transaction/initialize"),
-                Content = new StringContent(JsonSerializer.Serialize(new
+                var order = await this.mediator.Send(new GetOrderQuery(model.Id));
+                if (order.Data == null)
                 {
-                    amount = TotalAmount.ToString(),
-                    currency = "ETB", 
-                    tx_ref = unique.ToString(),
-                    //return_url = r_url,
-                    //callback_url = "https://brave-clocks-jam.loca.lt/api/Order/verify",
-                }), System.Text.Encoding.UTF8, "application/json")
-            };
+                    response.Message = order.Message;
+                    return response;
+                }
+                var unique = model.Id;
+                var TotalAmount = order.Data.TotalAmount;
+
+                var request = new HttpRequestMessage
+                {
+                    Method = HttpMethod.Post,
+                    RequestUri = new Uri("https://api.chapa.co/v1/transaction/initialize"),
+                    Content = new StringContent(JsonSerializer.Serialize(new
+                    {
+                        amount = TotalAmount.ToString(),
+                        currency = "ETB",
+                        tx_ref = unique.ToString(),
+                        //return_url = r_url,
+                        //callback_url = "https://brave-clocks-jam.loca.lt/api/Order/verify",
+                    }), System.Text.Encoding.UTF8, "application/json")
+                };
 
 
-            request.Headers.Add("Authorization", "Bearer CHASECK_TEST-mrwVfokQVSm1FUUfx1xFwsvbRsHW6BsX");
+                request.Headers.Add("Authorization", "Bearer CHASECK_TEST-mrwVfokQVSm1FUUfx1xFwsvbRsHW6BsX");
 
-            var responseChapa = await _httpClient.SendAsync(request);
+                var responseChapa = await _httpClient.SendAsync(request);
 
-            var responseContent = await responseChapa.Content.ReadAsStringAsync();
+                var responseContent = await responseChapa.Content.ReadAsStringAsync();
 
-            if (responseChapa.IsSuccessStatusCode)
-            {
-                var responseObject = JsonDocument.Parse(responseContent);
-                var checkoutUrl = responseObject.RootElement.GetProperty("data").GetProperty("checkout_url").GetString();
-                response.Data = checkoutUrl;
-                response.Message = "Payment request granted!";
-                return response;
+                if (responseChapa.IsSuccessStatusCode)
+                {
+                    var responseObject = JsonDocument.Parse(responseContent);
+                    var checkoutUrl = responseObject.RootElement.GetProperty("data").GetProperty("checkout_url").GetString();
+                    response.Data = checkoutUrl;
+                    response.Message = "Payment request granted!";
+                    return response;
+                }
+                else
+                {
+                    response.Message = StatusCode((int)responseChapa.StatusCode, responseContent).ToString();
+
+                    return response;
+                }
             }
-            else
+            catch(Exception ex) 
             {
-                response.Message = StatusCode((int)responseChapa.StatusCode, responseContent).ToString();
+                response.Message = ex.Message;
                 return response;
             }
         }
@@ -84,6 +94,8 @@ namespace DirectFarm.API.Controllers
             request.Headers.Add("Authorization", "Bearer CHASECK_TEST-mrwVfokQVSm1FUUfx1xFwsvbRsHW6BsX");
 
             var responseChapa = await _httpClient.SendAsync(request);
+            
+            Console.WriteLine(responseChapa.ToString());
             response.Message = await responseChapa.Content.ReadAsStringAsync();
             response.Data = responseChapa.IsSuccessStatusCode;
 

@@ -32,16 +32,16 @@ namespace DirectFarm.API.Controllers
         }
 
         [HttpPost("Login")]
-        public async Task<Response<TokenResponseModel>> Login(LoginRequestModel login)
+        public async Task<Response<TokenResponseModel<CustomerEntity>>> Login(LoginRequestModel login)
         {
-            var response = new Response<TokenResponseModel>();
+            var response = new Response<TokenResponseModel<CustomerEntity>>();
             try
             {
                 var model = await IsValidUser(login.Email, login.Password);
                 if (model != null) // Example validation
                 {
                     var entity = await this.mediator.Send(new SaveTokenCommand(login.Email, model.RefreshToken));
-                    response.Data = new TokenResponseModel(model, entity.Data);
+                    response.Data = new TokenResponseModel<CustomerEntity>(model, entity.Data);
                     response.Message = "Login successful!";
                 }
                 else
@@ -94,9 +94,9 @@ namespace DirectFarm.API.Controllers
         }
 
         [HttpPost("Register")]
-        public async Task<Response<TokenResponseModel>> RegisterAndLogin(RegisterRequestModel register)
+        public async Task<Response<TokenResponseModel<CustomerEntity>>> RegisterAndLogin(RegisterRequestModel register)
         {
-            var response = new Response<TokenResponseModel>();
+            var response = new Response<TokenResponseModel<CustomerEntity>>();
             try
             {
                 // Step 1: Register the user in Keycloak
@@ -113,7 +113,7 @@ namespace DirectFarm.API.Controllers
                 if (model != null) // Example validation
                 {
                     var entity = await this.mediator.Send(new RegisterCustomerCommand(register.toCustomer(), model.RefreshToken));
-                    response.Data = new TokenResponseModel(model, entity.Data);
+                    response.Data = new TokenResponseModel<CustomerEntity>(model, entity.Data);
                     response.Message = "Registration successful!";
                 }
                 else
@@ -168,7 +168,7 @@ namespace DirectFarm.API.Controllers
                     return registerResponse;
                 //}
 
-                //// Get the created user's ID
+                // Get the created user's ID
                 //var getUserEndpoint = $"{registrationEndpoint}?username={register.Email}";
                 //var getUserResponse = await httpClient.GetAsync(getUserEndpoint);
                 //if (!getUserResponse.IsSuccessStatusCode)
@@ -195,14 +195,14 @@ namespace DirectFarm.API.Controllers
                 //{
                 //    new
                 //    {
-                //        id = "6816afa1-568b-410e-8460-106abb812d69", // Replace with your role ID
+                //        id = "7d8b373c-04e6-4855-8494-072d9685193a", // Replace with your role ID
                 //        name = "client" // Replace with your role name
                 //    }
                 //};
                 //var roleJsonPayload = JsonSerializer.Serialize(rolePayload);
                 //var roleContent = new StringContent(roleJsonPayload, Encoding.UTF8, "application/json");
                 //var response = await httpClient.PostAsync(roleMappingEndpoint, roleContent);
-                ////if (!response.IsSuccessStatusCode) 
+                //if (!response.IsSuccessStatusCode) 
                 //{
                 //    throw new Exception($"Issue while registering role : {response}");
                 //}
@@ -246,9 +246,9 @@ namespace DirectFarm.API.Controllers
         }
 
         [HttpPost("Refresh")]
-        public async Task<Response<TokenResponseModel>> Refresh(string email)
+        public async Task<Response<TokenResponseModel<CustomerEntity>>> Refresh(string email)
         {
-            var response = new Response<TokenResponseModel>();
+            var response = new Response<TokenResponseModel<CustomerEntity>>();
             try
             {
                 var tokenEndpoint = _configuration["Keycloak:AuthorizationUrltok"];
@@ -275,7 +275,7 @@ namespace DirectFarm.API.Controllers
                     if (refreshResponse.IsSuccessStatusCode)
                     {
                         var tokenEntity = JsonSerializer.Deserialize<TokenModel>(responseContent);
-                        response.Data = new TokenResponseModel(tokenEntity);
+                        response.Data = new TokenResponseModel<CustomerEntity>(tokenEntity);
                         response.Message = "Token refreshed successfully!";
                     }
                     else

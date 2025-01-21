@@ -4,6 +4,7 @@ using DirectFarm.Core.Contracts.Query;
 using DirectFarm.Core.Entity;
 using Infrastracture.Base;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DirectFarm.API.Controllers
@@ -27,6 +28,7 @@ namespace DirectFarm.API.Controllers
             var result = await this.mediator.Send(new SaveProductCommand(product));
             return result;
         }
+        //[Authorize( Roles = "admin")]
         [HttpGet("GetAllProducts")]
         public async Task<Response<List<ProductEntity>>> GetAllProducts()
         {

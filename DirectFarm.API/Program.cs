@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
+using System.Security.Claims;
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,22 +48,65 @@ builder.Services.AddCors(options =>
 
 });
 
-builder.Services.AddAuthorization();
+//builder.Services.AddAuthorization();
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(o =>
+    .AddJwtBearer(o =>
+    {
+        o.RequireHttpsMetadata = false;
+        o.Audience = builder.Configuration["Authentication:Audience"];
+        o.MetadataAddress = builder.Configuration["Authentication:MetadataAddress"];
+        o.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            ClockSkew = TimeSpan.Zero,
+        };
+
+        o.Events = new JwtBearerEvents
+        {
+            OnTokenValidated = context =>
+            {
+                // Access the resource_access part of the token
+                var resourceAccess = context.Principal.Claims.FirstOrDefault(c => c.Type == "resource_access")?.Value;
+                if (!string.IsNullOrEmpty(resourceAccess))
                 {
-                    o.RequireHttpsMetadata = false;
-                    o.Audience = builder.Configuration["Authentication:Audience"];
-                    o.MetadataAddress = builder.Configuration["Authentication:MetadataAddress"];
-                    o.TokenValidationParameters = new TokenValidationParameters
+                    var resourceAccessJson = JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, List<string>>>>(resourceAccess);
+                    if (resourceAccessJson != null && resourceAccessJson.TryGetValue("directClient", out var clientRoles))
                     {
-                        ValidIssuer = builder.Configuration["Jwt:Issuer"],
-                        ValidAudience = builder.Configuration["Jwt:Audience"],
-                        ClockSkew = TimeSpan.Zero,
-                    };
-                });
+                        foreach (var role in clientRoles["roles"])
+                        {
+                            context.Principal.Identities.First().AddClaim(new Claim(ClaimTypes.Role, role));
+                        }
+                    }
+                }
+                return Task.CompletedTask;
+            }
+        };
+    });
+// Add this to configure authorization policies if needed
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminOnly", policy => policy.RequireClaim("roles", "admin"));
+    options.AddPolicy("ClientOnly", policy => policy.RequireClaim("roles", "client"));
+    options.AddPolicy("ManagerOnly", policy => policy.RequireClaim("roles","manager"));
+    // Add more policies as needed
+});
+
+//builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+//                .AddJwtBearer(o =>
+//                {
+//                    o.RequireHttpsMetadata = false;
+//                    o.Audience = builder.Configuration["Authentication:Audience"];
+//                    o.MetadataAddress = builder.Configuration["Authentication:MetadataAddress"];
+//                    o.TokenValidationParameters = new TokenValidationParameters
+//                    {
+//                        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+//                        ValidAudience = builder.Configuration["Jwt:Audience"],
+//                        ClockSkew = TimeSpan.Zero,
+//                    };
+//                });
 builder.Services.AddControllersWithViews();
 builder.Services.AddSwaggerGen(o =>
 {

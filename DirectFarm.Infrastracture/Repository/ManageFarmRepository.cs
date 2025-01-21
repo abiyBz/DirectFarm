@@ -493,5 +493,53 @@ namespace DirectFarm.Infrastracture.Repository
             await UpdateAsync<OrderModel>(order);
             await UnitOfWork.SaveChanges();
         }
+        public async Task<List<WarehouseModel>> GetManagersWarehouses(Guid id) 
+        {
+            var warehouses = await FindAsync<WarehouseModel>(x => x.manager_id == id);
+            return warehouses.ToList();
+        } 
+        public async Task<List<FarmerProductEntity>> GetAllFarmerProducts() 
+        {
+            var farmerProducts = await GetAllAsync<FarmerProductModel>();
+            var farmerlist = farmerProducts.ToList();
+            var farmerproductlist = new List<FarmerProductEntity>();
+            foreach (var item in farmerlist)
+            {
+                farmerproductlist.Add (new FarmerProductEntity(item, await FindOneAsync<FarmerModel>(x => x.farmer_id == item.farmer_id), await FindOneAsync<WarehouseModel>(x => x.warehouse_id == item.warehouse_id), await FindOneAsync<ProductModel>(x => x.product_id == item.product_id)));
+                
+            }
+            return farmerproductlist;
+
+        }
+        public async Task<List<FarmerProductEntity>> GetWarehouseFarmerProducts(Guid id) 
+        {
+            var farmerProducts = await FindAsync<FarmerProductModel>(x => x.warehouse_id == id);
+            var farmerlist = farmerProducts.ToList();
+            var farmerproductlist = new List<FarmerProductEntity>();
+            foreach (var item in farmerlist)
+            {
+                farmerproductlist.Add(new FarmerProductEntity(item, await FindOneAsync<FarmerModel>(x => x.farmer_id == item.farmer_id), await FindOneAsync<ProductModel>(x => x.product_id == item.product_id)));
+            }
+            return farmerproductlist;
+        }
+        public async Task<List<FarmerProductEntity>> GetFarmersProductFarmer(Guid id)
+        {
+            var farmerProducts = await FindAsync<FarmerProductModel>(x => x.farmer_id == id);
+            var farmerlist = farmerProducts.ToList();
+            var farmerproductlist = new List<FarmerProductEntity>();
+            foreach (var item in farmerlist)
+            {
+                farmerproductlist.Add(new FarmerProductEntity(item, await FindOneAsync<ProductModel>(x => x.product_id == item.product_id)));
+            }
+            return farmerproductlist;
+        }
+        public async Task<WarehouseManagerModel> SaveManagerRefreshToken(string email, string refreshtoken)
+        {
+            var model = await FindOneAsync<WarehouseManagerModel>(x => x.email == email);
+            model.refresh_token = refreshtoken;
+            await UpdateAsync<WarehouseManagerModel>(model);
+            //await UnitOfWork.SaveChanges();
+            return model;
+        }
     }
     }

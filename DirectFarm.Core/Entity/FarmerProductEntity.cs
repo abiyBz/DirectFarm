@@ -25,6 +25,30 @@ namespace DirectFarm.Core.Entity
             Warehouse = new WarehouseEntity(model.warehouse_id);
             QuantityAvailable = model.quantity_available;
             AddedAt = model.added_at;
-        }   
+        }
+        public FarmerProductEntity(FarmerProductModel model, FarmerModel fmodel, WarehouseModel Wmodel, ProductModel pmodel)
+        {
+            Id = model.id;
+            Farmer = new FarmerEntity(fmodel);
+            Product = new ProductEntity(pmodel);
+            Warehouse = new WarehouseEntity(Wmodel);
+            QuantityAvailable = model.quantity_available;
+            AddedAt = model.added_at;
+        }
+        public FarmerProductEntity (FarmerProductModel model, ProductModel pmodel)
+        {
+            Id = model.id;
+            Product = new ProductEntity(pmodel);
+            QuantityAvailable = model.quantity_available;
+            AddedAt = model.added_at;
+        }
+        public FarmerProductEntity(FarmerProductModel model, FarmerModel fmodel, ProductModel pmodel)
+        {
+            Id = model.id;
+            Farmer = new FarmerEntity(fmodel);
+            Product = new ProductEntity(pmodel);
+            QuantityAvailable = model.quantity_available;
+            AddedAt = model.added_at;
+        }
     }
 }

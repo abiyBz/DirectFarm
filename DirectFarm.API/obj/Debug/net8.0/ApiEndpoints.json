@@ -1,5 +1,31 @@
 [
   {
+    "ContainingType": "DirectFarm.API.Controllers.AdminController",
+    "Method": "Login",
+    "RelativePath": "api/Admin/AdminLogin",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "login",
+        "Type": "DirectFarm.API.GetModel.LoginRequestModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "Infrastracture.Base.Response\u00601[[DirectFarm.API.PostModel.TokenResponseModel\u00601[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], DirectFarm.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "DirectFarm.API.Controllers.CustomerController",
     "Method": "GetAllCustomers",
     "RelativePath": "api/Customer/GetAllCustomers",
@@ -61,7 +87,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "Infrastracture.Base.Response\u00601[[DirectFarm.API.PostModel.TokenResponseModel, DirectFarm.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "Infrastracture.Base.Response\u00601[[DirectFarm.API.PostModel.TokenResponseModel\u00601[[DirectFarm.Core.Entity.CustomerEntity, DirectFarm.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], DirectFarm.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -87,7 +113,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "Infrastracture.Base.Response\u00601[[DirectFarm.API.PostModel.TokenResponseModel, DirectFarm.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "Infrastracture.Base.Response\u00601[[DirectFarm.API.PostModel.TokenResponseModel\u00601[[DirectFarm.Core.Entity.CustomerEntity, DirectFarm.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], DirectFarm.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -113,7 +139,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "Infrastracture.Base.Response\u00601[[DirectFarm.API.PostModel.TokenResponseModel, DirectFarm.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "Infrastracture.Base.Response\u00601[[DirectFarm.API.PostModel.TokenResponseModel\u00601[[DirectFarm.Core.Entity.CustomerEntity, DirectFarm.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], DirectFarm.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -589,6 +615,26 @@
   },
   {
     "ContainingType": "DirectFarm.API.Controllers.WarehouseController",
+    "Method": "GetAllFarmerProducts",
+    "RelativePath": "api/Warehouse/GetAllFarmerProducts",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "Infrastracture.Base.Response\u00601[[System.Collections.Generic.List\u00601[[DirectFarm.Core.Entity.FarmerProductEntity, DirectFarm.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "DirectFarm.API.Controllers.WarehouseController",
     "Method": "GetAllManagers",
     "RelativePath": "api/Warehouse/GetAllManagers",
     "HttpMethod": "GET",
@@ -644,6 +690,58 @@
     "ReturnTypes": [
       {
         "Type": "Infrastracture.Base.Response\u00601[[System.Collections.Generic.List\u00601[[DirectFarm.Core.Entity.ProductEntity, DirectFarm.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "DirectFarm.API.Controllers.WarehouseController",
+    "Method": "GetManagersWarehouses",
+    "RelativePath": "api/Warehouse/GetManagersWarehouses",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "model",
+        "Type": "DirectFarm.API.GetModel.BaseModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "Infrastracture.Base.Response\u00601[[System.Collections.Generic.List\u00601[[DirectFarm.Core.Entity.WarehouseEntity, DirectFarm.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "DirectFarm.API.Controllers.WarehouseController",
+    "Method": "GetWarehouseFarmerProducts",
+    "RelativePath": "api/Warehouse/GetWarehouseFarmerProducts",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "model",
+        "Type": "DirectFarm.API.GetModel.BaseModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "Infrastracture.Base.Response\u00601[[System.Collections.Generic.List\u00601[[DirectFarm.Core.Entity.FarmerProductEntity, DirectFarm.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -722,6 +820,32 @@
     "ReturnTypes": [
       {
         "Type": "Infrastracture.Base.Response\u00601[[DirectFarm.Core.Entity.WarehouseManagerEntity, DirectFarm.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "DirectFarm.API.Controllers.WarehouseController",
+    "Method": "Login",
+    "RelativePath": "api/Warehouse/WarehouseLogin",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "login",
+        "Type": "DirectFarm.API.GetModel.LoginRequestModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "Infrastracture.Base.Response\u00601[[DirectFarm.API.PostModel.TokenResponseModel\u00601[[DirectFarm.Core.Entity.WarehouseManagerEntity, DirectFarm.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], DirectFarm.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
