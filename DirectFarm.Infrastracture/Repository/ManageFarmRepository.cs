@@ -41,6 +41,7 @@ namespace DirectFarm.Infrastracture.Repository
                     model.product_id = product.Id;
                     model.image = updateModel.image;
                     model.amount = updateModel.amount;
+                    model.created_at = SetKindUtc(model.created_at);
                     await UpdateAsync<ProductModel>(model);
                     await UnitOfWork.SaveChanges();
                 }
