@@ -26,7 +26,7 @@ namespace DirectFarm.API.Controllers
             return result;
             
         }
-        [HttpPost("GetAllFarmers")]
+        [HttpGet("GetAllFarmers")]
         public async Task<Response<List<FarmerEntity>>> GetAllFarmerFarmers()
         {
             var result = await this.mediator.Send(new GetAllFarmersQuery());
