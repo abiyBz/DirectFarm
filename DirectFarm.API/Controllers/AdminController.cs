@@ -8,6 +8,8 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using System.Text;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace DirectFarm.API.Controllers
 {
@@ -29,23 +31,48 @@ namespace DirectFarm.API.Controllers
         public async Task<Response<TokenResponseModel<bool>>> Login(LoginRequestModel login)
         {
             var response = new Response<TokenResponseModel<bool>>();
-            response.Data = new TokenResponseModel<bool>();     
+            response.Data = new TokenResponseModel<bool>();
             try
             {
                 var model = await IsValidUser(login.Email, login.Password);
                 if (model != null) // Example validation
                 {
                     response.Data = new TokenResponseModel<bool>(model, true);
-                    
-                    response.Message = "Admin Login successful!";
+                    var tokenHandler = new JwtSecurityTokenHandler();
+                    var securityToken = tokenHandler.ReadToken(model.AccessToken) as JwtSecurityToken;
+
+                    if (securityToken != null)
+                    {
+                        // Fetch the resource_access claim
+                        var resourceAccessClaim = securityToken.Claims.FirstOrDefault(c => c.Type == "resource_access")?.Value;
+                        if (!string.IsNullOrEmpty(resourceAccessClaim))
+                        {
+                            var resourceAccess = JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, List<string>>>>(resourceAccessClaim);
+                            if (resourceAccess != null && resourceAccess.TryGetValue("directClient", out var clientRoles))
+                            {
+                                // Extract roles from directClient
+                                var roles = clientRoles["roles"];
+                                foreach (var role in roles)
+                                {
+                                    if (role == "admin")
+                                    {
+                                        response.Message = "Admin Login successful!";
+                                        return response;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    throw new Exception("User is not an admin!");
                 }
                 else
                 {
-                    response.Message = "Admin Login failed!";
+                    throw new Exception("Admin Login failed!");
                 }
             }
             catch (Exception ex)
             {
+                response.Data = null;
                 response.Ex = ex;
                 response.Message = ex.Message;
             }

@@ -441,7 +441,7 @@
     "ContainingType": "DirectFarm.API.Controllers.ProductController",
     "Method": "GetAvailableProducts",
     "RelativePath": "api/Product/GetAvailableProducts",
-    "HttpMethod": "POST",
+    "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [],

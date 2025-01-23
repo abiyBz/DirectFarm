@@ -11,6 +11,8 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Text;
 using Microsoft.Win32;
+using System.IdentityModel.Tokens.Jwt;
+using System.Reflection;
 
 namespace DirectFarm.API.Controllers
 {
@@ -197,7 +199,7 @@ namespace DirectFarm.API.Controllers
             var result = await this.mediator.Send(new GetManagersWarehouseQuery(model.Id));
             return result;
         }
-        [HttpPost("GetAllFarmerProducts")]
+        [HttpGet("GetAllFarmerProducts")]
         public async Task<Response<List<FarmerProductEntity>>> GetAllFarmerProducts()
         {
             var result = await this.mediator.Send(new GetAllFarmerProductsQuery());
@@ -220,13 +222,39 @@ namespace DirectFarm.API.Controllers
                 {
                     var entity = await this.mediator.Send(new SaveManagerTokenCommand(login.Email, model.RefreshToken));
                     response.Data = new TokenResponseModel<WarehouseManagerEntity>(model, entity.Data);
-                    response.Message = "Manager Login successful!";
+                    var tokenHandler = new JwtSecurityTokenHandler();
+                    var securityToken = tokenHandler.ReadToken(model.AccessToken) as JwtSecurityToken;
+
+                    if (securityToken != null)
+                    {
+                        // Fetch the resource_access claim
+                        var resourceAccessClaim = securityToken.Claims.FirstOrDefault(c => c.Type == "resource_access")?.Value;
+                        if (!string.IsNullOrEmpty(resourceAccessClaim))
+                        {
+                            var resourceAccess = JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, List<string>>>>(resourceAccessClaim);
+                            if (resourceAccess != null && resourceAccess.TryGetValue("directClient", out var clientRoles))
+                            {
+                                // Extract roles from directClient
+                                var roles = clientRoles["roles"];
+                                foreach (var role in roles)
+                                {
+                                    if (role == "manager")
+                                    {
+                                        response.Message = "Manager Login successful!";
+                                        return response;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    throw new Exception("User is not an Manager!");
                 }
                 else
-                    response.Message = "Manager Login failed!";
+                    throw new Exception("Manager Login failed!");
             }
             catch (Exception ex)
             {
+                response.Data = null;
                 response.Ex = ex;
                 response.Message = ex.Message;
             }

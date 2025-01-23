@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DirectFarm.Infrastracture")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+828f0cd947bdc963d2b8791fd643050c81b91c9e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+133edbb28ebc69bcfdabac0d711fe92831181e68")]
 [assembly: System.Reflection.AssemblyProductAttribute("DirectFarm.Infrastracture")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DirectFarm.Infrastracture")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
