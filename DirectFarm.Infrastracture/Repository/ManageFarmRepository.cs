@@ -145,7 +145,11 @@ namespace DirectFarm.Infrastracture.Repository
                 {
                     throw new Exception("Product " + num.ToString() + " doesnt exist!");
                 }
-                item.PriceAtPurchase = product.price_per_unit;
+                if(product.discount <= 0) item.PriceAtPurchase = product.price_per_unit;
+                else
+                {
+                    item.PriceAtPurchase = product.price_per_unit - (product.discount * product.price_per_unit);
+                }
                 item.Product = new ProductEntity(product);
                 item.Amount = item.PriceAtPurchase * item.Quantity;
                 if (product.amount < item.Quantity) throw new Exception($"There isn't enough {product.name} there is only {product.amount} {product.unit} left. Adjust your order accordingly and order again.; በቂ {product.name_amharic} አልተገኘም። ለአሁኑ የቀረው {product.amount} {product.unit} ብቻ ነው። ትዛዙን ያስተካክሉ እና እንደገና ያዘዙ።");
@@ -421,8 +425,8 @@ namespace DirectFarm.Infrastracture.Repository
                 await DeleteAsync<ReviewModel>(review);
             }
             model.review_id = Guid.Empty;
-            var orders = await FindAsync<OrderModel>(x => x.customer_id == entity.Customer.Id);
-            if (orders == null) throw new Exception("Customer hasn't madeany orders!");
+            var orders = await FindAsync<OrderModel>(x => x.customer_id == entity.Customer.Id && x.status == "picked up");
+            if (orders == null) throw new Exception("Customer hasn't made any orders that were picked up!");
             var productOrders = new List<ProductOrderModel>();
             foreach (var item in orders.ToList())
             {

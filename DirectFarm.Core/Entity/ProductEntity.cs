@@ -1,6 +1,7 @@
 ﻿using DirectFarm.Core.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
@@ -21,6 +22,9 @@ namespace DirectFarm.Core.Entity
         //public string? Image { get; set; }
         public string? NameAmharic { get; set; }
         public string? DescriptionAmharic { get; set; }
+        public decimal PercentageDiscount { get; set; }
+        [Range(0, 100, ErrorMessage = "Percentage discount must be between 0 and 100.")]
+        public decimal? DiscountedPrice { get; set; }
         //public int quantity {  get; set; }
         public ProductEntity() { }
         public ProductEntity(ProductModel model) 
@@ -36,6 +40,8 @@ namespace DirectFarm.Core.Entity
             //Image = model.image;
             NameAmharic = model.name_amharic;
             DescriptionAmharic = model.description_amharic;
+            PercentageDiscount = model.discount *100;
+            DiscountedPrice = model.price_per_unit - (model.discount * model.price_per_unit);
             //quantity = model.amount;
         }
         public ProductEntity(Guid id) 
@@ -59,6 +65,9 @@ namespace DirectFarm.Core.Entity
                 Unit = model.unit,
                 CreatedAt = model.created_at,
                 Status = model.status,
+                PercentageDiscount = model.discount * 100,
+                DiscountedPrice = model.price_per_unit - (model.discount * model.price_per_unit),
+
             }).ToList();
         }
         public static List<ProductEntity> IdtoEntityList(List<Guid> id) 

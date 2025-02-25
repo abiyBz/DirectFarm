@@ -21,6 +21,8 @@ namespace DirectFarm.Core.Models
         public string? name_amharic { get; set; }
         public string? description_amharic { get; set; }
         public decimal amount { get; set; }
+        public decimal discount { get; set; }
+
 
         public ProductModel(ProductEntity entity) 
         {
@@ -35,6 +37,7 @@ namespace DirectFarm.Core.Models
             name_amharic = entity.NameAmharic;
             description_amharic = entity.DescriptionAmharic;
             amount = 0;
+            discount = entity.PercentageDiscount / 100;
         }
         public ProductModel() { }
     }

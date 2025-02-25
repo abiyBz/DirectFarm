@@ -1,0 +1,93 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/26.0.9 Chrome/128.0.6613.186 Electron/32.2.5 Safari/537.36" version="26.0.9">
+  <diagram name="Page-1" id="y941tija_722dR-JQGQy">
+    <mxGraphModel dx="1434" dy="956" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="mg9gGtw2u3cUgsMHX7m4-1" value="" style="rounded=0;html=1;jettySize=auto;orthogonalLoop=1;fontSize=11;endArrow=block;endFill=0;endSize=8;strokeWidth=1;shadow=0;labelBackgroundColor=none;edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="mg9gGtw2u3cUgsMHX7m4-2" target="mg9gGtw2u3cUgsMHX7m4-8">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="220" y="170" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="mg9gGtw2u3cUgsMHX7m4-2" value="User select the object to be deleted" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" vertex="1" parent="1">
+          <mxGeometry x="160" y="80" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="mg9gGtw2u3cUgsMHX7m4-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="mg9gGtw2u3cUgsMHX7m4-8" target="mg9gGtw2u3cUgsMHX7m4-27">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="220" y="270" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="mg9gGtw2u3cUgsMHX7m4-8" value="Make request to API with object ID&amp;nbsp;" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" vertex="1" parent="1">
+          <mxGeometry x="160" y="169" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="mg9gGtw2u3cUgsMHX7m4-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="mg9gGtw2u3cUgsMHX7m4-10" target="mg9gGtw2u3cUgsMHX7m4-17">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="220" y="560" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="mg9gGtw2u3cUgsMHX7m4-10" value="Controller calls any necessary external APIs&amp;nbsp;" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" vertex="1" parent="1">
+          <mxGeometry x="145" y="455" width="150" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="mg9gGtw2u3cUgsMHX7m4-16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="mg9gGtw2u3cUgsMHX7m4-17" target="mg9gGtw2u3cUgsMHX7m4-19">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="mg9gGtw2u3cUgsMHX7m4-17" value="Dynamically call the method that impliments the business logic." style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" vertex="1" parent="1">
+          <mxGeometry x="147" y="560" width="145" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="mg9gGtw2u3cUgsMHX7m4-18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="mg9gGtw2u3cUgsMHX7m4-19" target="mg9gGtw2u3cUgsMHX7m4-24">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="mg9gGtw2u3cUgsMHX7m4-19" value="Apply business logic" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" vertex="1" parent="1">
+          <mxGeometry x="153.5" y="670" width="133" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="mg9gGtw2u3cUgsMHX7m4-20" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="mg9gGtw2u3cUgsMHX7m4-24" target="mg9gGtw2u3cUgsMHX7m4-25">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="mg9gGtw2u3cUgsMHX7m4-21" value="No" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="mg9gGtw2u3cUgsMHX7m4-20">
+          <mxGeometry x="-0.2325" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="mg9gGtw2u3cUgsMHX7m4-22" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="mg9gGtw2u3cUgsMHX7m4-24" target="mg9gGtw2u3cUgsMHX7m4-26">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="mg9gGtw2u3cUgsMHX7m4-23" value="Yes" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="mg9gGtw2u3cUgsMHX7m4-22">
+          <mxGeometry x="-0.24" y="-1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="mg9gGtw2u3cUgsMHX7m4-24" value="Does the&amp;nbsp;&lt;div&gt;object&amp;nbsp;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;sent from user contain a valid ID&lt;/span&gt;&lt;/div&gt;" style="rhombus;whiteSpace=wrap;html=1;shadow=0;fontFamily=Helvetica;fontSize=12;align=center;strokeWidth=1;spacing=6;spacingTop=-4;" vertex="1" parent="1">
+          <mxGeometry x="152.25" y="780" width="135.5" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="mg9gGtw2u3cUgsMHX7m4-25" value="Throw exception" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" vertex="1" parent="1">
+          <mxGeometry x="377" y="810" width="133" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="mg9gGtw2u3cUgsMHX7m4-26" value="Delete object" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" vertex="1" parent="1">
+          <mxGeometry x="153.5" y="940" width="133" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="mg9gGtw2u3cUgsMHX7m4-28" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="mg9gGtw2u3cUgsMHX7m4-27" target="mg9gGtw2u3cUgsMHX7m4-10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="mg9gGtw2u3cUgsMHX7m4-29" value="Yes" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="mg9gGtw2u3cUgsMHX7m4-28">
+          <mxGeometry x="-0.1293" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="mg9gGtw2u3cUgsMHX7m4-31" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="mg9gGtw2u3cUgsMHX7m4-27" target="mg9gGtw2u3cUgsMHX7m4-30">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="mg9gGtw2u3cUgsMHX7m4-32" value="No" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="mg9gGtw2u3cUgsMHX7m4-31">
+          <mxGeometry x="-0.0993" y="-1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="mg9gGtw2u3cUgsMHX7m4-27" value="Is the&amp;nbsp;&lt;div&gt;user authorized to make action&lt;/div&gt;" style="rhombus;whiteSpace=wrap;html=1;shadow=0;fontFamily=Helvetica;fontSize=12;align=center;strokeWidth=1;spacing=6;spacingTop=-4;" vertex="1" parent="1">
+          <mxGeometry x="163.07" y="270" width="113.87" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="mg9gGtw2u3cUgsMHX7m4-30" value="Notify User" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" vertex="1" parent="1">
+          <mxGeometry x="377" y="297.5" width="113" height="45" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
