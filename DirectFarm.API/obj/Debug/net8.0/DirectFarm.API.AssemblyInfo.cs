@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DirectFarm.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3203c9b064ba8c3969a145598560ca5a9eb297e9")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f881f7cfaa94aaa24accb1dc0d6b34234fb553ba")]
 [assembly: System.Reflection.AssemblyProductAttribute("DirectFarm.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DirectFarm.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
