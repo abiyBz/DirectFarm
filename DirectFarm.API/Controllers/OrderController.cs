@@ -82,34 +82,55 @@ namespace DirectFarm.API.Controllers
             }
         }
         [HttpPost("VerifyPayment")]
-        public async Task<Response<bool>> verifyAndOrder(BaseModel model)
+        public async Task verifyAndOrderAsync(object verifyModel)
         {
-            var response = new Response<bool>();
-
-            var request = new HttpRequestMessage
+            if (verifyModel == null) throw new Exception("Invalid Input to verify payment");
+            var model = JsonSerializer.Deserialize<PaymentVerifyModel>(verifyModel.ToString(), new JsonSerializerOptions
             {
-                Method = HttpMethod.Get,
-                RequestUri = new Uri("https://api.chapa.co/v1/transaction/verify/" + model.Id.ToString())
-            };
-            request.Headers.Add("Authorization", "Bearer CHASECK_TEST-mrwVfokQVSm1FUUfx1xFwsvbRsHW6BsX");
+                PropertyNameCaseInsensitive = true // Ensure case-insensitive property matching
+            });
 
-            var responseChapa = await _httpClient.SendAsync(request);
-            
-            Console.WriteLine(responseChapa.ToString());
-            response.Message = await responseChapa.Content.ReadAsStringAsync();
-            response.Data = responseChapa.IsSuccessStatusCode;
+            if (model == null) throw new Exception("Invalid model");
 
-            if (!responseChapa.IsSuccessStatusCode)
+            // Access properties directly
+            Guid orderId = Guid.Parse(model.tx_ref);
+            if (model.Status == "success")
             {
-                Console.WriteLine($"Failed to initialize transaction with Chapa. Status Code: {responseChapa.StatusCode}, Response: {responseChapa}");
-                response = await this.mediator.Send(new RecordPaymentCommand(model.Id, false));
+                await this.mediator.Send(new RecordPaymentCommand(orderId, true));
             }
-            else 
+            else
             {
-                response = await this.mediator.Send(new RecordPaymentCommand(model.Id, true));
+                await this.mediator.Send(new RecordPaymentCommand(orderId, false));
+
+
             }
-            return response;
         }
+
+        //var response = new Response<bool>();
+
+        //var request = new HttpRequestMessage
+        //{
+        //    Method = HttpMethod.Get,
+        //    RequestUri = new Uri("https://api.chapa.co/v1/transaction/verify/" + model.Id.ToString())
+        //};
+        //request.Headers.Add("Authorization", "Bearer CHASECK_TEST-mrwVfokQVSm1FUUfx1xFwsvbRsHW6BsX");
+
+        //var responseChapa = await _httpClient.SendAsync(request);
+
+        //Console.WriteLine(responseChapa.ToString());
+        //response.Message = await responseChapa.Content.ReadAsStringAsync();
+        //response.Data = responseChapa.IsSuccessStatusCode;
+
+        //if (!responseChapa.IsSuccessStatusCode)
+        //{
+        //    Console.WriteLine($"Failed to initialize transaction with Chapa. Status Code: {responseChapa.StatusCode}, Response: {responseChapa}");
+        //    response = await this.mediator.Send(new RecordPaymentCommand(model.Id, false));
+        //}
+        //else 
+        //{
+        //    response = await this.mediator.Send(new RecordPaymentCommand(model.Id, true));
+        //}
+        //return response;
 
         [HttpPost("PlaceOrder")]
         public async Task<Response<OrderEntity>> PlaceOrder(SaveOrderModel order)

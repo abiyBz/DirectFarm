@@ -367,26 +367,22 @@
   },
   {
     "ContainingType": "DirectFarm.API.Controllers.OrderController",
-    "Method": "verifyAndOrder",
+    "Method": "verifyAndOrderAsync",
     "RelativePath": "api/Order/VerifyPayment",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "model",
-        "Type": "DirectFarm.API.GetModel.BaseModel",
+        "Name": "verifyModel",
+        "Type": "System.Object",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "Infrastracture.Base.Response\u00601[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
+        "Type": "System.Void",
+        "MediaTypes": [],
         "StatusCode": 200
       }
     ]
